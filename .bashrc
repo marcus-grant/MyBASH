@@ -182,6 +182,9 @@ function extract () {
   #CD - UPDATE THIS
   alias dev='cd ~/Dropbox/Dev'
   alias ios='cd ~/Dropbox/Dev/iOS'
+  alias ..='cd ..'
+  alias ...='cd ../..'
+  alias ....='cd ../../..'
 
   #Application Starters
   alias oxw='open *.xcw*'
@@ -189,7 +192,8 @@ function extract () {
 
   # LS
   alias l='ls -lahG'
-  alias ls='ls -G'
+  alias ll='ls -FGLAhp' # my preffered ls call, but I'm calling it ll instead of replacing
+
 
   # Git
   alias gcl="git clone"
