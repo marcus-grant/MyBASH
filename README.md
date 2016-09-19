@@ -22,18 +22,14 @@ Whenever this repository is being used for the first time, a few things will nee
 # Prompt Configuration
 The prompt is what you see on the left-most side of every open command line, it is there originally to show you what user you are currently logged in or aliased as on the system, and it shows you under which hostname you are operating on, which is very useful when you telnet or ssh into a system to manage it. In this case we are going to add some more info, like the timestamp for when the prompt was written, to help track time, the git branch you are on if there is one in your current directory, the current directory, and we will style it to my liking. To do this, add the lines below to your `.bashrc`.
 ```
-# Configuring Our Prompt
-# ======================
-
-  # if you install git via homebrew, or install the bash autocompletion via homebrew, you get __git_ps1 which you can use in the PS1
-  # to display the git branch.  it's supposedly a bit faster and cleaner than manually parsing through sed. i dont' know if you care 
-  # enough to change it
-
   # This function is called in your prompt to output your active git branch.
   function parse_git_branch {
     git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
   }
+```
+This is a helper function to help parse out if there is a .git folder present in the current directory, and if there is one, get the name of the branch that is currently active on that git folder.
 
+```
   # This function builds your prompt. It is called below
   function prompt {
     # Define some local colors
@@ -49,14 +45,16 @@ The prompt is what you see on the left-most side of every open command line, it 
       PS2='> '
       PS4='+ ' 
     }
-
+```
+Here is a function that actually does the job of configuring the prompt. There are local variables that define colors and characters used in that prompt, because as you can see in the export statement (the statement that configures the bash prompt) has very unwieldy syntax that I can never remember no matter how hard I try, kudos you glorious master-race neckbeards. If you need to configure the prompt in any other way, it's best to lookup code snippets online that help create specific parts of the prompt that you might like, the link that's in the file is where I drew my inspiration, and that is the snippet I hunted for to modify in helping creating this prompt. Isolating definitions and bash calls into function as I did makes it MUCH easier to quickly and easily modify certain parts of the prompt definition, and honestly, it should probably be broken up even further with local definitions for formatting each individual part of the prompt definition, such as the formatting for the timestamp, or whatever else.
+```
   # Finally call the function and our prompt is all pretty
   prompt
-
-  # For more prompt coolness, check out Halloween Bash:
-  # http://xta.github.io/HalloweenBash/
-
-  # If you break your prompt, just delete the last thing you did.
-  # And that's why it's good to keep your dotfiles in git too.
 ```
+And then of course, because we created this helper function to layout the prompt, that function needs to actually be called to be of any use.
+
+
+
+
+
 
