@@ -53,6 +53,106 @@ Here is a function that actually does the job of configuring the prompt. There a
 ```
 And then of course, because we created this helper function to layout the prompt, that function needs to actually be called to be of any use.
 
+# Environmental Variables & Paths
+** This entire section requires rework because it came from a macOS .bash_profile **
+
+# Helper Functions
+Here is where there are several helpful bash functions defined to make life on BASH easier.
+```
+function desktop {
+  cd /Users/$USER/Desktop/$@
+}
+```
+Here is a function that helps you take your terminal right to the current user's `~/Desktop/` folder wherever you may currently be. Simply type `desktop` into your prompt.
+
+```
+function extract () {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)  tar xjf $1      ;;
+            *.tar.gz)   tar xzf $1      ;;
+            *.bz2)      bunzip2 $1      ;;
+            *.rar)      rar x $1        ;;
+            *.gz)       gunzip $1       ;;
+            *.tar)      tar xf $1       ;;
+            *.tbz2)     tar xjf $1      ;;
+            *.tgz)      tar xzf $1      ;;
+            *.zip)      unzip $1        ;;
+            *.Z)        uncompress $1   ;;
+            *)          echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+```
+This snippet I particularly love. I wish I could remember where I got it from, but if anyone knows, do please chime in, in the comments or issues section, and I will gladly give credit where credit is due. But anyways, what this function `extract` does, is simplify the process of extracting files/directories from a compressed file/archive. How it works, is that it creates a switch statement that checks for the suffix of the file for different common file extensions for compressed files. Then it puts out the proper terminal command to extract that file into the current working directory. To use; simply go to the folder you want to extract to, and type `extract FILE_PATH` and replace *FILE_PATH* with the path and filename of the compressed file you want extracted there.
+
+# Aliases
+Here is the section where I keep all of my various aliases that either replace common bash commands, with parameter calls that I think should be the default, or create new commands using the alias command to make terminal work easier. Aliases are easily defined in BASH. Simply type `alias ALIAS_NAME='ALIAS_COMMAND'` where you replace *ALIAS_NAME* with the command you type to execute the alias, and *ALIAS_COMMAND* is the same command that you would normally type into the terminal.
+  
+```
+  alias dev='cd ~/Dropbox/Dev'
+  alias ios='cd ~/Dropbox/Dev/iOS'
+```
+These aliases define shortcut commands that help me get to my various development environments quickly.
+
+```
+  alias oxw='open *.xcw*'
+  alias oxp='open *.xcod*'
+```
+Here I define aliases that are shortcuts for opening a file with a particular application, or simply open the application without any starter file.
+
+
+```
+  alias l='ls -lahG'
+  alias ls='ls -G'
+  alias ll='ls -laG'
+```
+These aliases are all based around the `ls` command. I **HATE** that the default BASH directory lookup command is color-less, and so I replace the command `ls` with the alias `alias ls='ls -G'` so that I always get colored results when I try and look at the files and folders within a directory. There are also other shortcuts that I frequently use to make life easier.
+
+```
+  alias gcl="git clone"
+  alias gst="git status"
+  alias gl="git pull"
+  alias gp="git push"
+  alias gd="git diff | mate"
+  alias gc="git commit -v"
+  alias gca="git commit -v -a"
+  alias gb="git branch"
+  alias gba="git branch -a"
+  alias gcam="git commit -am"
+  alias gbb="git branch -b"
+```
+Git commands can get arduous because you'll find yourself typing `git` a whole lot. Why not make them shortcuts to get through git management a little bit easilier? I don't think it's a good idea however, to replace any git commands with overwritting aliases, because there's a lot of critical functionality present in some of the original commands.
+
+```
+  bind "set completion-ignore-case on" 
+```
+I prefer to make file and directory search case-insensitive, so this binding makes all file or directory statements case-insensitive. Comment out, if you'd prefer to leave it the standard way.
+
+# Final Configurations & Plugins
+** TODO: This is OS specific and needs an audit **
+Here I keep a grab-bag of configs and plugins that 
+```
+########
+#
+# 5. Final Configurations & Plugins
+#
+########
+  # Git Bash Completion
+  # Will activate bash git completion if installed
+  # via homebrew on macOS, or whatever linux package manager you use
+  # NEEDS UPDATING TO WORK ON BOTH macOS & various Linux carnations
+  #if [ -f `brew --prefix`/etc/bash_completion ]; then
+  #  . `brew --prefix`/etc/bash_completion
+  #fi
+
+  # RVM - NEEDS AUDITING
+  # Mandatory loading of RVM into the shell
+  # This must be the last line of your bash_profile always
+  #[[ -s "/Users/$USER/.rvm/scripts/rvm" ]] && source "/Users/$USER/.rvm/scripts/rvm"  # This loads RVM into a shell session.
+```
 
 
 
