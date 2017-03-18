@@ -23,29 +23,56 @@
 #
 ########
 
-  # if you install git via homebrew, or install the bash autocompletion via homebrew, you get __git_ps1 which you can use in the PS1
-  # to display the git branch.  it's supposedly a bit faster and cleaner than manually parsing through sed. i dont' know if you care 
-  # enough to change it
+  # if you install git via homebrew, or install the bash autocompletion via -
+  # - homebrew, you get __git_ps1 which you can use in the PS1 to display the -
+  # - git branch.  it's supposedly a bit faster and cleaner than manually -
+  # - parsing through sed. i dont' know if you care enough to change it
 
   # This function is called in your prompt to output your active git branch.
   function parse_git_branch {
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
   }
 
   # This function builds your prompt. It is called below
   function prompt {
     # Define some local colors
-    local   RED="\[\033[0;31m\]" # This syntax is some weird bash color stuff
-    local   LIGHT_RED="\[\033[1;31m\]" # only master neckbears understand.
-    local   CHAR="♥" # Not even I understand it, my neckbeard isn't there yet.
-    local   BLUE="\[\e[0;49;34m\]" # Google snippets if you want other prompt setups
+    # local   RED="\[\033[0;31m\]" # This syntax is some weird bash color stuff
+    local COLOR_NC='\e[0m' # No Color
+    local COLOR_WHITE='\e[1;37m' # Some color codes that make absolutely
+    local COLOR_BLACK='\e[0;30m' # no sense to me, they're just googled snippets
+    local COLOR_BLUE='\e[0;34m'
+    local COLOR_LIGHT_BLUE='\e[1;34m'
+    local COLOR_GREEN='\e[0;32m'
+    local COLOR_LIGHT_GREEN='\e[1;32m'
+    local COLOR_CYAN='\e[0;36m'
+    local COLOR_LIGHT_CYAN='\e[1;36m'
+    local COLOR_RED='\e[0;31m'
+    local COLOR_LIGHT_RED='\e[1;31m'
+    local COLOR_PURPLE='\e[0;35m'
+    local COLOR_LIGHT_PURPLE='\e[1;35m'
+    local COLOR_BROWN='\e[0;33m'
+    local COLOR_YELLOW='\e[1;33m'
+    local COLOR_GRAY='\e[0;30m'
+    local COLOR_LIGHT_GRAY='\e[0;37m'
+    local CHAR_HEART="♥"
+    local CHAR_OPEN_SQUARE_BRACKET="["
+    local CHAR_CLOSED_SQUARE_BRACKET="]"
 
     # ♥ ☆ - Keeping some cool ASCII Characters for reference
 
     # Here is where we actually export the PS1 Variable which stores the text for your prompt
-    export PS1="\[\e]2;\u@\h\a[\[\e[37;44;1m\]\t\[\e[0m\]]$RED\$(parse_git_branch) \[\e[32m\]\W\[\e[0m\]\n\[\e[0;31m\]$BLUE//$RED $CHAR \[\e[0m\]"
+    local TIMESTAMP='$COLOR_WHITE#'
+    #Old Prompt
+    #export PS1="$COLOR_NC[\[\e[37;44;1m\]\t\[\e[0m\]]$COLOR_RED\$(parse_git_branch) \[\e[32m\]\W\[\e[0m\]\n\[\e[0;31m\]$COLOR_BLUE//$COLOR_RED $CHAR_HEART \[\e[0m\]"
+    local TOP_POINTER_LINE=$COLOR_WHITE'┌─['
+    local USER_PROMPT=$COLOR_GREEN"\u"$COLOR_WHITE"@"
+    local HOST_PROMPT=$COLOR_GREEN"\h"$COLOR_WHITE':'
+    local PWD_PROMPT=$COLOR_BLUE"\w"$COLOR_WHITE']'
+    local GIT_PROMPT=$COLOR_RED$COLOR_WHITE
+    local BOTTOM_PROMPT="└─>"
+    PS1=$TOP_POINTER_LINE$USER_PROMPT$HOST_PROMPT$PWD_PROMPT$GIT_PROMPT'\n'$BOTTOM_PROMPT
       PS2='> '
-      PS4='+ ' 
+      PS4='+ '
     }
 
   # Finally call the function and our prompt is all pretty
@@ -56,9 +83,9 @@
 
   # If you break your prompt, just delete the last thing you did.
   # And that's why it's good to keep your dotfiles in git too.
-  
-  
-  
+
+
+
 ########
 #
 # 2. Environmental Variables & Paths
@@ -123,6 +150,8 @@
     # For example, mine is:
     # /Users/avi/.rvm/gems/ruby-1.9.3-p392/bin:/Users/avi/.rvm/gems/ruby-1.9.3-p392@global/bin:/Users/avi/.rvm/rubies/ruby-1.9.3-p392/bin:/Users/avi/.rvm/bin:/usr/local:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/local/mysql/bin:/usr/local/share/python:/bin:/usr/sbin:/sbin:
 
+
+
 ########
 #
 # 3. Helper Functions
@@ -165,6 +194,7 @@ function extract () {
             *.tgz)      tar xzf $1      ;;
             *.zip)      unzip $1        ;;
             *.Z)        uncompress $1   ;;
+	    *.7zip)	7z x $1		;;
             *)          echo "'$1' cannot be extracted via extract()" ;;
         esac
     else
@@ -178,7 +208,7 @@ function extract () {
 # 4. Aliases
 #
 ########
-  
+
   #CD - UPDATE THIS
   alias dev='cd ~/Dropbox/Dev'
   alias ios='cd ~/Dropbox/Dev/iOS'
@@ -191,9 +221,17 @@ function extract () {
   alias oxp='open *.xcod*'
 
   # LS
+  # Set all common options desired on ls first by replacing the default ls command, here, I want to force color always on ls
+  alias ls='ls --color=always'
   alias l='ls -lahG'
   alias ll='ls -FGLAhp' # my preffered ls call, but I'm calling it ll instead of replacing
+  alias lt='ls -laHGt'
 
+  # Grep
+  alias grep='grep --color=auto'
+
+  # Xresources
+  alias xup='xrdb ~/.Xresources'
 
   # Git
   alias gcl="git clone"
@@ -208,9 +246,28 @@ function extract () {
   alias gcam="git commit -am"
   alias gbb="git branch -b"
 
+  # QEMU-KVM virtual machine launch aliases
+  alias loki="sudo /home/marcus/VMs/Loki/loki-start"
+  alias loki-headless="sudo /home/marcus/VMs/Loki/loki-start-headless"
 
+  # tmux
+  function tma()    { tmux attach -t $1; }
+  function tml()    { tmux list-sessions; }
+  function tmn()    { tmux new -s $1; }
+  function tms()    { tmux switch -t $1; }
+  function tmk()    { tmux kill-session -t $1; }
+  function tmr()    { tmux rename-session -t $1 $2; }
+  function tmlk()   { tmux list-keys; }
+
+
+
+  # launch steam on arch
+
+function steam-arch {
+	LD_PRELOAD='/usr/$LIB/libstdc++.so.6 /usr/$LIB/libgcc_s.so.1 /usr/$LIB/libxcb.so.1 /usr/$LIB/libgpg-error.so' steam
+}
 # Case-Insensitive Auto Completion
-  bind "set completion-ignore-case on" 
+  bind "set completion-ignore-case on"
 
 ########
 #
@@ -229,4 +286,3 @@ function extract () {
   # Mandatory loading of RVM into the shell
   # This must be the last line of your bash_profile always
   #[[ -s "/Users/$USER/.rvm/scripts/rvm" ]] && source "/Users/$USER/.rvm/scripts/rvm"  # This loads RVM into a shell session.
-
