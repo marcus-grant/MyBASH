@@ -286,3 +286,10 @@ function steam-arch {
   # Mandatory loading of RVM into the shell
   # This must be the last line of your bash_profile always
   #[[ -s "/Users/$USER/.rvm/scripts/rvm" ]] && source "/Users/$USER/.rvm/scripts/rvm"  # This loads RVM into a shell session.
+
+  # Setup paths for virtualenv
+  if [ -d ~/.virtualenvs ]; then
+	  export WORKON_HOME=$HOME/.virtualenvs 
+	  source /usr/local/bin/virtualenvwrapper.sh 
+	  export PIP_VIRTUALENV_BASE=$WORKON_HOME
+  fi
