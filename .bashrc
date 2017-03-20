@@ -51,7 +51,8 @@
     local COLOR_PURPLE='\e[0;35m'
     local COLOR_LIGHT_PURPLE='\e[1;35m'
     local COLOR_BROWN='\e[0;33m'
-    local COLOR_YELLOW='\e[1;33m'
+    local COLOR_YELLOW='\e[0;33m'
+    local COLOR_LIGHT_YELLOW='\e[1;33m'
     local COLOR_GRAY='\e[0;30m'
     local COLOR_LIGHT_GRAY='\e[0;37m'
     local CHAR_HEART="♥"
@@ -64,13 +65,13 @@
     local TIMESTAMP='$COLOR_WHITE#'
     #Old Prompt
     #export PS1="$COLOR_NC[\[\e[37;44;1m\]\t\[\e[0m\]]$COLOR_RED\$(parse_git_branch) \[\e[32m\]\W\[\e[0m\]\n\[\e[0;31m\]$COLOR_BLUE//$COLOR_RED $CHAR_HEART \[\e[0m\]"
-    local TOP_POINTER_LINE=$COLOR_WHITE'┌─['
-    local USER_PROMPT=$COLOR_GREEN"\u"$COLOR_WHITE"@"
-    local HOST_PROMPT=$COLOR_GREEN"\h"$COLOR_WHITE':'
-    local PWD_PROMPT=$COLOR_BLUE"\w"$COLOR_WHITE']'
+    local TOP_POINTER_LINE=$COLOR_WHITE'─['
+    local USER_PROMPT=$COLOR_LIGHT_GREEN"\u"$COLOR_WHITE"@"
+    local HOST_PROMPT=$COLOR_LIGHT_GREEN"\h"$COLOR_WHITE':'
+    local PWD_PROMPT=$COLOR_LIGHT_BLUE"\w"$COLOR_WHITE']'
     local GIT_PROMPT=$COLOR_RED$COLOR_WHITE
-    local BOTTOM_PROMPT="└─>"
-    PS1=$TOP_POINTER_LINE$USER_PROMPT$HOST_PROMPT$PWD_PROMPT$GIT_PROMPT'\n'$BOTTOM_PROMPT
+    local BOTTOM_PROMPT="─>"
+    PS1=$TOP_POINTER_LINE$USER_PROMPT$HOST_PROMPT$PWD_PROMPT$COLOR_LIGHT_YELLOW$(parse_git_branch)$COLOR_WHITE'\n'$BOTTOM_PROMPT
       PS2='> '
       PS4='+ '
     }
