@@ -260,7 +260,8 @@ function extract () {
   function tmr()    { tmux rename-session -t $1 $2; }
   function tmlk()   { tmux list-keys; }
 
-
+  # system sysctl service etc.
+  alias sctl="systemctl"
 
   # launch steam on arch
 
