@@ -203,6 +203,14 @@ function extract () {
     fi
 }
 
+# Because I always forget the address format for git clones using SSH -
+# here is a function that takes a string USER/REPOSITORY as only argument
+function gcs () {
+	local argument=$1
+	gitCommand="git clone git@github.com:"$argument".git"
+	echo "Executing command: $gitCommand"
+	$gitCommand
+}
 
 ########
 #
