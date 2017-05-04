@@ -268,6 +268,10 @@ function gcs () {
   function tmr()    { tmux rename-session -t $1 $2; }
   function tmlk()   { tmux list-keys; }
 
+  # lvm stuff
+  alias lvm-cache-stat="lvs -a -o +devices,cache_total_blocks,cache_used_blocks,cache_dirty_blocks,cache_read_hits,cache_read_misses,cache_write_hits,cache_write_misses,segtype"
+
+
   # system sysctl service etc.
   alias sctl="systemctl"
 
