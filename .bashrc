@@ -238,6 +238,7 @@ function gcs () {
 
   # Grep
   alias grep='grep --color=auto'
+  alias igrep='grep -i' # a grep alias for case insensitive searches
 
   # Xresources
   alias xup='xrdb ~/.Xresources'
