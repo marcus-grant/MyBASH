@@ -212,6 +212,19 @@ function gcs () {
 	$gitCommand
 }
 
+# A helper to pipe commands into python for immediate interpretation
+# TODO: figure out proper way to handle newlines, quotes, and spaces
+function pypipe()
+{
+
+  python_statements="$1"
+  echo "$python_statements" | python
+  # for statement in "$@"; do
+  #   python_statements="$python_statements$statement\n"
+  # done
+  # echo "$python_statements" | python
+}
+
 ########
 #
 # 4. Aliases
@@ -301,7 +314,7 @@ function steam-arch {
 
   # Setup paths for virtualenv
   if [ -d ~/.virtualenvs ]; then
-	  export WORKON_HOME=$HOME/.virtualenvs 
-	  source /usr/local/bin/virtualenvwrapper.sh 
+	  export WORKON_HOME=$HOME/.virtualenvs
+	  source /usr/local/bin/virtualenvwrapper.sh
 	  export PIP_VIRTUALENV_BASE=$WORKON_HOME
   fi
