@@ -150,7 +150,9 @@
     # If you go into your shell and type: echo $PATH you will see the output of your current path.
     # For example, mine is:
     # /Users/avi/.rvm/gems/ruby-1.9.3-p392/bin:/Users/avi/.rvm/gems/ruby-1.9.3-p392@global/bin:/Users/avi/.rvm/rubies/ruby-1.9.3-p392/bin:/Users/avi/.rvm/bin:/usr/local:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/local/mysql/bin:/usr/local/share/python:/bin:/usr/sbin:/sbin:
-
+    
+    # Anaconda (change for OS)
+    export PATH="/home/marcus/.anaconda3/bin:$PATH"
 
 
 ########

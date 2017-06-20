@@ -2,7 +2,7 @@
 
 dotfilePath=$(pwd)
 realConfigPath=$dotfilePath/.bashrc
-homePath=/home/$USER
+homePath=$HOME
 linkPath=$homePath/.bashrc
 
 echo "Preparing environment for BASH configuration."
