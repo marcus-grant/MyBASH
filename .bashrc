@@ -227,6 +227,21 @@ function pypipe()
   # echo "$python_statements" | python
 }
 
+
+function caps-as-esc()
+{
+    xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+}
+
+
+# ssh-agent startup script that checks for a previous running one
+#if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+#    ssh-agent > ~/.ssh-agent-thing
+#fi
+#if [[ "$SSH_AGENT_PID" == "" ]]; then
+#    eval "$(<~/.ssh-agent-thing)"
+#fi
+
 ########
 #
 # 4. Aliases
