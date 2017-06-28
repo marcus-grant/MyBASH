@@ -242,6 +242,50 @@ function caps-as-esc()
 #    eval "$(<~/.ssh-agent-thing)"
 #fi
 
+
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  toggle-touchpad
+#   DESCRIPTION:  From http://bit.ly/2tUl5QN & http://bit.ly/1lsLa2r
+#				Toggles touchpad on & off to the system with prompts if desired
+#    PARAMETERS:  -q or --quiet if no prompts are wanted, otherwise it will
+#       RETURNS:  Nothin but an echo and notify-osd even by default
+#-------------------------------------------------------------------------------
+toggle-touchpad ()
+{	
+	IS_QUIET=0
+	if (( $# > 0 )); then
+		if [[ "$1" == "-q" ]] || [[ "$1" == "--quiet" ]]; then
+			IS_QUIET=1
+		else
+			echo ""
+			echo "[ERROR] bashrc:toggle-touchpad(): wrong argument given, only -q or --quiet or nothing permitted"
+			echo "By default the toggle invokes bash echo outs and notify osd prompts"
+			echo ""
+		fi
+	fi 
+    declare -i ID
+    ID=`xinput list | grep -Eio '(touchpad|glidepoint)\s*id\=[0-9]{1,2}' | grep -Eo '[0-9]{1,2}'`
+    declare -i STATE
+    STATE=`xinput list-props $ID|grep 'Device Enabled'|awk '{print $4}'`
+    if [ $STATE -eq 1 ]; then
+    	xinput disable $ID
+		if (( IS_QUIET == 0 )); then
+    		echo "Touchpad disabled." 
+			notify-send 'Touchpad' 'Disabled' -i /usr/share/icons/Adwaita/48x48/devices/input-touchpad.png
+		fi
+	else
+    	xinput enable $ID
+		if (( IS_QUIET == 0 )); then
+    		echo "Touchpad enabled." 
+			notify-send 'Touchpad' 'Enabled' -i /usr/share/icons/Adwaita/48x48/devices/input-touchpad.png
+		fi
+    # echo "Touchpad enabled."
+    # notify-send 'Touchpad' 'Enabled' -i /usr/share/icons/Adwaita/48x48/devices/input-touchpad.png
+	fi
+
+}	# ----------  end of function toggle-touchpad  ----------
+
+
 ########
 #
 # 4. Aliases
