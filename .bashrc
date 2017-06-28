@@ -285,6 +285,18 @@ toggle-touchpad ()
 
 }	# ----------  end of function toggle-touchpad  ----------
 
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  view-markup
+#   DESCRIPTION:  From https://unix.stackexchange.com/questions/4140/markdown-viewer#120519
+#   -- Views any marked up document like *.md as a styled page inside lynx
+#   -- Requires pandoc & lynx, potentially python later
+#    PARAMETERS: None (for now) | TODO: output options 
+#       RETURNS: Opens lynx after piping with pandoc
+#-------------------------------------------------------------------------------
+view-markup ()
+{
+    pandoc $1 | lynx -stdin
+}	# ----------  end of function view-markup  ----------
 
 ########
 #
