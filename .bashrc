@@ -238,6 +238,13 @@ function caps-as-esc()
 }
 
 
+keyboard-default ()
+{
+    setxkbmap us
+}	# ----------  end of function keyboard-default  ----------
+
+
+
 # ssh-agent startup script that checks for a previous running one
 #if ! pgrep -u "$USER" ssh-agent > /dev/null; then
 #    ssh-agent > ~/.ssh-agent-thing
