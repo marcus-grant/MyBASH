@@ -116,10 +116,10 @@
     # Editors
     # Here you define default editors to be used by the OS whenever you ask to open a file
     # The -w flag tells your shell to wait until sublime exits
-    #export VISUAL="subl -w"
+    export VISUAL="gedit"
     #export SVN_EDITOR="subl -w"
-    #export GIT_EDITOR="subl -w"
-    #export EDITOR="subl -w"
+    export GIT_EDITOR="vim"
+    export EDITOR="vim"
 
   # Paths
 
@@ -153,6 +153,10 @@
     
     # Anaconda (change for OS)
     export PATH="/home/marcus/.anaconda3/bin:$PATH"
+
+    # eval keychain to update ssh-agent with private keys
+    eval $(keychain --eval --quiet ~/.ssh/git.key ~/.ssh/pattern.key)
+
 
 
 ########
@@ -341,6 +345,7 @@ view-markup ()
   alias gba="git branch -a"
   alias gcam="git commit -am"
   alias gbb="git branch -b"
+
 
   # QEMU-KVM virtual machine launch aliases
   alias loki="sudo /home/marcus/VMs/Loki/loki-start"
