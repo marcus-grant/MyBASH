@@ -18,5 +18,9 @@ fi
 if hash archey3 2>/dev/null; then
     archey3
 fi
+# TODO: Add an else for when archey isn't there, that at the very least includes uname and hostname
+
+# Run the bashrc
+source ~/.bashrc
 
 
