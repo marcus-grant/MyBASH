@@ -20,7 +20,19 @@ if hash archey3 2>/dev/null; then
 fi
 # TODO: Add an else for when archey isn't there, that at the very least includes uname and hostname
 
+
+
+#-------------------------------------------------------------------------------
+# environment variables
+#-------------------------------------------------------------------------------
+# TODO !!!!!! Be sure to migrate the .bashrc ones over to here instead
+
+# Rust's cargo package manager needs for there to be some kind of standard path
+export PATH="$HOME/.cargo/bin:$PATH"
+
+
 # Run the bashrc
 source ~/.bashrc
+
 
 
