@@ -331,8 +331,10 @@ view-markup ()
 ########
 
   #CD - UPDATE THIS
-  alias dev='cd ~/Dropbox/Dev'
-  alias ios='cd ~/Dropbox/Dev/iOS'
+  alias dev='cd ~/Code'
+#  alias ios='cd ~/Dropbox/Dev/iOS'
+  alias pydev='cd ~/Code/Python'
+  alias webdev='cd ~/Code/Web'
   alias ..='cd ..'
   alias ...='cd ../..'
   alias ....='cd ../../..'
