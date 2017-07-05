@@ -1,43 +1,73 @@
 #!/bin/bash
 
-dotfilePath=$(pwd)
-realConfigPath=$dotfilePath/.bashrc
-homePath=$HOME
-linkPath=$homePath/.bashrc
-profileLinkPath=$homePath/.bash_profile
-profilePath=$dotfilePath/.bash_profile
+
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  get-script-dir
+#   DESCRIPTION:  Gets the current script directory
+#    PARAMETERS:  
+#       RETURNS:  
+#-------------------------------------------------------------------------------
+get-script-dir ()
+{
+   	source="${BASH_SOURCE[0]}"
+	while [ -h "$source" ]; do # resolve $source until the file is no longer a symlink
+  		dir="$( cd -P "$( dirname "$source" )" && pwd )"
+  		source="$(readlink "$source")"
+  		# if $source was a relative symlink, we need to resolve it relative
+ 		# to the path where the symlink file was located
+  		[[ $source != /* ]] && source="$dir/$source"
+	done
+	dir="$( cd -P "$( dirname "$source" )" && pwd )"
+	echo $dir
+}	# ----------  end of function get-script-dir  ----------
+
+
+dotfile_path=$(get-script-dir)
+real_config_path=$dotfile_path/.bashrc
+home_path=$HOME
+link_path=$home_path/.bashrc
+profile_link_path=$home_path/.bash_profile
+profile_origin_path=$dotfile_path/.bash_profile
+powerline_origin_path=$dotfile_path/powerline-shell.py
+powerline_link_path=$HOME/.powerline-shell.py
 
 echo "Preparing environment for BASH configuration."
 echo "Checking if previous .bashrc exists."
 
-if [ -f $linkPath ]; then
+if [ -f $link_path ]; then
 	echo "Previous bash file exists, backing it up with .bak suffix"
-	mv $linkPath $linkPath.bak
+	mv $link_path $linkPath.bak
 fi
 
-if [ -L $linkPath ]; then
+if [ -L $link_path ]; then
 	echo "Previous symlink exists, removing it."
-	rm $linkPath
+	rm $link_path
 fi
 
-if [ -f $profileLinkPath ]; then
+if [ -f $profile_link_path ]; then
     echo "Previous bash_profile exists, removing it."
-    rm $profileLinkPath
+    rm $profile_link_path
 fi
 
-if [ -f $profileLinkPath ]; then
+if [ -f $profile_link_path ]; then
     echo "Previous bash_profile symlink exists, removing it."
-    rm $profileLinkPath
+    rm $profile_link_path
 fi
 
 
 echo "Creating symlink for .bashrc"
-echo "$linkPath -> $realConfigPath"
-ln -s $realConfigPath $linkPath
+echo "$link_path -> $real_config_path"
+ln -s $real_config_path $link_path
 
 echo "Creating symlink for .bash_profile"
-echo "$profileLinkPath -> $profilePath"
-ln -s $profilePath $profileLinkPath
+echo "$profile_link_path -> $profile_origin_path"
+ln -s $profile_origin_path $profile_link_path
 echo
+
+echo "Creating symlink for ~/powerline-shell.py"
+rm ~/powerline-shell.py
+ln -s $powerline_origin_path $powerline_link_path
+echo
+
 echo "Dotfile preperation complete!"
 exit 0
