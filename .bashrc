@@ -33,51 +33,83 @@
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
   }
 
-  # This function builds your prompt. It is called below
-  function prompt {
+  #---  FUNCTION  ----------------------------------------------------------------
+  #          NAME:  old_prompt
+  #   DESCRIPTION:  The old version using static decorations for old bash PS1
+  #    PARAMETERS:  
+  #       RETURNS:  
+  #-------------------------------------------------------------------------------
+  function old_prompt {
     # Define some local colors
     # local   RED="\[\033[0;31m\]" # This syntax is some weird bash color stuff
-    local COLOR_NC='\e[0m' # No Color
-    local COLOR_WHITE='\e[1;37m' # Some color codes that make absolutely
-    local COLOR_BLACK='\e[0;30m' # no sense to me, they're just googled snippets
-    local COLOR_BLUE='\e[0;34m'
-    local COLOR_LIGHT_BLUE='\e[1;34m'
-    local COLOR_GREEN='\e[0;32m'
-    local COLOR_LIGHT_GREEN='\e[1;32m'
-    local COLOR_CYAN='\e[0;36m'
-    local COLOR_LIGHT_CYAN='\e[1;36m'
-    local COLOR_RED='\e[0;31m'
-    local COLOR_LIGHT_RED='\e[1;31m'
-    local COLOR_PURPLE='\e[0;35m'
-    local COLOR_LIGHT_PURPLE='\e[1;35m'
-    local COLOR_BROWN='\e[0;33m'
-    local COLOR_YELLOW='\e[0;33m'
-    local COLOR_LIGHT_YELLOW='\e[1;33m'
-    local COLOR_GRAY='\e[0;30m'
-    local COLOR_LIGHT_GRAY='\e[0;37m'
-    local CHAR_HEART="♥"
-    local CHAR_OPEN_SQUARE_BRACKET="["
-    local CHAR_CLOSED_SQUARE_BRACKET="]"
+    local color_nc='\e[0m' # No Color
+    local color_white='\e[1;37m' # Some color codes that make absolutely
+    local color_black='\e[0;30m' # no sense to me, they're just googled snippets
+    local color_blue='\e[0;34m'
+    local color_light_blue='\e[1;34m'
+    local color_green='\e[0;32m'
+    local color_light_green='\e[1;32m'
+    local color_cyan='\e[0;36m'
+    local color_light_cyan='\e[1;36m'
+    local color_red='\e[0;31m'
+    local color_light_red='\e[1;31m'
+    local color_purple='\e[0;35m'
+    local color_light_purple='\e[1;35m'
+    local color_brown='\e[0;33m'
+    local color_yellow='\e[0;33m'
+    local color_light_yellow='\e[1;33m'
+    local color_gray='\e[0;30m'
+    local color_light_gray='\e[0;37m'
+
+
+    
+    
 
     # ♥ ☆ - Keeping some cool ASCII Characters for reference
+    local char_heart="♥"
+    local char_open_square_bracket="["
+    local char_closed_square_bracket="]"
+    
+
 
     # Here is where we actually export the PS1 Variable which stores the text for your prompt
-    local TIMESTAMP='$COLOR_WHITE#'
+    local timestamp='$color_white#'
     #Old Prompt
-    #export PS1="$COLOR_NC[\[\e[37;44;1m\]\t\[\e[0m\]]$COLOR_RED\$(parse_git_branch) \[\e[32m\]\W\[\e[0m\]\n\[\e[0;31m\]$COLOR_BLUE//$COLOR_RED $CHAR_HEART \[\e[0m\]"
-    local TOP_POINTER_LINE=$COLOR_WHITE'['
-    local USER_PROMPT=$COLOR_LIGHT_GREEN"\u"$COLOR_WHITE"@"
-    local HOST_PROMPT=$COLOR_LIGHT_GREEN"\h"$COLOR_WHITE':'
-    local PWD_PROMPT=$COLOR_LIGHT_BLUE"\w"$COLOR_WHITE']'
-    local GIT_PROMPT=$COLOR_RED$COLOR_WHITE
-    local BOTTOM_PROMPT=":"
-    PS1=$TOP_POINTER_LINE$USER_PROMPT$HOST_PROMPT$PWD_PROMPT$COLOR_LIGHT_YELLOW$(parse_git_branch)$COLOR_WHITE'\n'$BOTTOM_PROMPT
+    #export PS1="$color_nc[\[\e[37;44;1m\]\t\[\e[0m\]]$COLOR_red\$(parse_git_branch) \[\e[32m\]\W\[\e[0m\]\n\[\e[0;31m\]$COLOR_blue//$COLOR_RED $char_heart \[\e[0m\]"
+    # OLD PROMPT [user@host:pwd](git)(venv)\n:
+    #local TOP_POINTER_LINE=$color_white'['
+    #local USER_PROMPT=$color_light_green"\u"$COLOR_white"@"
+    #local HOST_PROMPT=$color_light_green"\h"$COLOR_white':'
+    #local PWD_PROMPT=$color_light_blue"\w"$COLOR_white']'
+    #local GIT_PROMPT=$color_red$COLOR_white
+    #local BOTTOM_PROMPT=":"
+    #PS1=$TOP_POINTER_LINE$USER_PROMPT$HOST_PROMPT$PWD_PROMPT$color_light_yellow$(parse_git_branch)$COLOR_white'\n'$BOTTOM_PROMPT
+
+    # New prompt to look like powerline
+    local 
       PS2='> '
       PS4='+ '
     }
 
+     
+    #---  FUNCTION  ----------------------------------------------------------------
+    #          NAME:  _update_ps
+    #   DESCRIPTION:  updates PS1 prompt using powerline-shell.py
+    #    PARAMETERS:  no params, but uses /bashrc/path/powerline-shell.py
+    #       RETURNS:  
+    #-------------------------------------------------------------------------------
+    function _update_ps1 ()
+    {
+        PS1="$(~/.powerline-shell.py $? 2> /dev/null)" 
+    }	# ----------  end of function _update_ps1  ----------
+
+    if [ "$TERM" != "linux" ]; then
+            PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+    fi
+
+  # DEPRECATED - No longer using
   # Finally call the function and our prompt is all pretty
-  prompt
+  #prompt
 
   # For more prompt coolness, check out Halloween Bash:
   # http://xta.github.io/HalloweenBash/
@@ -92,36 +124,19 @@
 # 2. Environmental Variables & Paths
 #
 ########
-  # Library Paths
-  # These variables tell your shell where they can find certain
-  # required libraries so other programs can reliably call the variable name
-  # instead of a hardcoded path.
 
-    # NODE_PATH
-    # Node Path from Homebrew, comment out if using OSX, not needed in Linux
-    #export NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
+# Terminal environment: Termite invokes its own, use xterm-256color instead
+export TERM=xterm-256color
 
-    # Those NODE & Python Paths won't break anything even if you
-    # don't have NODE or Python installed. Eventually you will and
-    # then you don't have to update your bash_profile
+# Editors
+# Here you define default editors to be used by the OS whenever you ask to open a file
+# The -w flag tells your shell to wait until sublime exits
+export VISUAL="gedit"
+#export SVN_EDITOR="subl -w"
+export GIT_EDITOR="vim"
+export EDITOR="vim"
 
-  # Configurations
-
-    # GIT_MERGE_AUTO_EDIT
-    # This variable configures git to not require a message when you merge.
-    # Comment out if you prefer git not to warn you whenever you merge
-    # I prefer to always be warned when this occurs, because I often make stupid muscle memory mistakes
-    #export GIT_MERGE_AUTOEDIT='no'
-
-    # Editors
-    # Here you define default editors to be used by the OS whenever you ask to open a file
-    # The -w flag tells your shell to wait until sublime exits
-    export VISUAL="gedit"
-    #export SVN_EDITOR="subl -w"
-    export GIT_EDITOR="vim"
-    export EDITOR="vim"
-
-  # Paths
+# Paths
 
     # The USR_PATHS variable will just store all relevant /usr paths for easier usage
     # Each path is seperate via a : and we always use absolute paths.
@@ -367,6 +382,11 @@ view-markup ()
   function tmr()    { tmux rename-session -t $1 $2; }
   function tmlk()   { tmux list-keys; }
 
+
+  #-----------------------------------------------------------------------
+  # Vim aliases
+  #-----------------------------------------------------------------------
+  alias viml='vim "+set background=light"' #runs vim in a light colorscheme
 
   # system sysctl service etc.
   alias sctl="systemctl"
