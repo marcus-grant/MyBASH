@@ -20,7 +20,7 @@ if hash archey3 2>/dev/null; then
 fi
 # TODO: Add an else for when archey isn't there, that at the very least includes uname and hostname
 
-
+# TODO: Move keychain key installations commands to here instead of rc
 
 #-------------------------------------------------------------------------------
 # environment variables
