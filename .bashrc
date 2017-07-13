@@ -170,7 +170,7 @@ export EDITOR="vim"
     export PATH="/home/marcus/.anaconda3/bin:$PATH"
 
     # eval keychain to update ssh-agent with private keys
-    eval $(keychain --eval --quiet ~/.ssh/git.key )
+    eval $(keychain --eval --quiet /home/marcus/.ssh/git.key )
 
 
 
@@ -380,7 +380,7 @@ view-markup ()
   # tmux
   function tma()    { tmux attach -t $1; }
   function tml()    { tmux list-sessions; }
-  function tmn()    { tmux new -2 -s $1; }
+  function tmn()    { tmux new -s $1; }
   function tms()    { tmux switch -t $1; }
   function tmk()    { tmux kill-session -t $1; }
   function tmr()    { tmux rename-session -t $1 $2; }
