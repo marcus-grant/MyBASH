@@ -32,7 +32,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 
 # Run the bashrc
-source ~/.bashrc
+source /root/.bashrc
 
 
 

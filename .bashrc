@@ -100,7 +100,7 @@
     #-------------------------------------------------------------------------------
     function _update_ps1 ()
     {
-        PS1="$(~/.powerline-shell.py $? 2> /dev/null)" 
+        PS1="$(/root/.powerline-shell.py $? 2> /dev/null)" 
     }	# ----------  end of function _update_ps1  ----------
 
     if [ "$TERM" != "linux" ]; then
@@ -423,7 +423,7 @@ function steam-arch {
 
   # Setup paths for virtualenv
   if [ -d ~/.virtualenvs ]; then
-	  export WORKON_HOME=$HOME/.virtualenvs
+	  export WORKON_HOME=/root/.virtualenvs
 	  source /usr/local/bin/virtualenvwrapper.sh
 	  export PIP_VIRTUALENV_BASE=$WORKON_HOME
   fi
