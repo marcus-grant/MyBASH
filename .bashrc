@@ -335,6 +335,7 @@ view-markup ()
   alias dev='cd ~/Code'
   alias pydev='cd ~/Code/python'
   alias webdev='cd ~/Code/web'
+  alias aidev='cd ~/Code/ai'
   alias dev-notes='cd ~/Documents/dev-notes'
   alias dotfiles='cd ~/.dotfiles'
   alias ..='cd ..'
