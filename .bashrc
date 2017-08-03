@@ -170,7 +170,11 @@ export EDITOR="vim"
     export PATH="/home/marcus/.anaconda3/bin:$PATH"
 
     # eval keychain to update ssh-agent with private keys
-    eval $(keychain --eval --quiet /home/marcus/.ssh/git.key )
+	if [ -f $HOME/.ssh/git.key ]; then
+	    eval $(keychain --eval --quiet /home/marcus/.ssh/git.key )
+	else
+		echo "Attempted to add git keychain, but no keyfile exists, ignoring..."
+	fi
 
 
 
