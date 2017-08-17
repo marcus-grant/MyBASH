@@ -100,7 +100,7 @@
     #-------------------------------------------------------------------------------
     function _update_ps1 ()
     {
-        PS1="$(~/.powerline-shell.py $? 2> /dev/null)" 
+        PS1="$($HOME/.powerline-shell.py $? 2> /dev/null)" 
     }	# ----------  end of function _update_ps1  ----------
 
     if [ "$TERM" != "linux" ]; then
@@ -167,14 +167,24 @@ export EDITOR="vim"
     # /Users/avi/.rvm/gems/ruby-1.9.3-p392/bin:/Users/avi/.rvm/gems/ruby-1.9.3-p392@global/bin:/Users/avi/.rvm/rubies/ruby-1.9.3-p392/bin:/Users/avi/.rvm/bin:/usr/local:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/local/mysql/bin:/usr/local/share/python:/bin:/usr/sbin:/sbin:
     
     # Anaconda (change for OS)
-    export PATH="/home/marcus/.anaconda3/bin:$PATH"
+    export PATH="$HOME/.anaconda3/bin:$PATH"
 
     # eval keychain to update ssh-agent with private keys
-	if [ -f $HOME/.ssh/git.key ]; then
-	    eval $(keychain --eval --quiet /home/marcus/.ssh/git.key )
-	else
-		echo "Attempted to add git keychain, but no keyfile exists, ignoring..."
-	fi
+    unameOut="$(uname -s)"
+    case "${unameOut}" in
+        Linux*)     
+            machine=Linux
+            if [ -f $HOME/.ssh/git.key ]; then
+                eval $(keychain --eval --quiet $HOME/.ssh/git.key )
+	        else
+		        echo "Attempted to add git keychain, but no keyfile exists, ignoring..."
+	        fi
+        ;;
+        Darwin*)    machine=Mac;;
+        CYGWIN*)    machine=Cygwin;;
+        MINGW*)     machine=MinGw;;
+        *)          machine="UNKNOWN:${unameOut}"
+    esac
 
 
 
@@ -266,10 +276,10 @@ keyboard-default ()
 
 # ssh-agent startup script that checks for a previous running one
 #if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-#    ssh-agent > ~/.ssh-agent-thing
+#    ssh-agent > $HOME/.ssh-agent-thing
 #fi
 #if [[ "$SSH_AGENT_PID" == "" ]]; then
-#    eval "$(<~/.ssh-agent-thing)"
+#    eval "$(<$HOME/.ssh-agent-thing)"
 #fi
 
 
@@ -335,13 +345,13 @@ view-markup ()
 ########
 
   #CD - UPDATE THIS
-#  alias ios='cd ~/Dropbox/Dev/iOS'
-  alias dev='cd ~/Code'
-  alias pydev='cd ~/Code/python'
-  alias webdev='cd ~/Code/web'
-  alias aidev='cd ~/Code/ai'
-  alias dev-notes='cd ~/Documents/dev-notes'
-  alias dotfiles='cd ~/.dotfiles'
+#  alias ios='cd $HOME/Dropbox/Dev/iOS'
+  alias dev='cd $HOME/Code'
+  alias pydev='cd $HOME/Code/python'
+  alias webdev='cd $HOME/Code/web'
+  alias aidev='cd $HOME/Code/ai'
+  alias dev-notes='cd $HOME/Documents/dev-notes'
+  alias dotfiles='cd $HOME/.dotfiles'
   alias ..='cd ..'
   alias ...='cd ../..'
   alias ....='cd ../../..'
@@ -362,7 +372,7 @@ view-markup ()
   alias igrep='grep -i' # a grep alias for case insensitive searches
 
   # Xresources
-  alias xup='xrdb ~/.Xresources'
+  alias xup='xrdb $HOME/.Xresources'
 
   # Git
   alias gcl="git clone"
@@ -379,8 +389,8 @@ view-markup ()
 
 
   # QEMU-KVM virtual machine launch aliases
-  alias loki="sudo /home/marcus/VMs/Loki/loki-start"
-  alias loki-headless="sudo /home/marcus/VMs/Loki/loki-start-headless"
+  alias loki="sudo $HOME/VMs/Loki/loki-start"
+  alias loki-headless="sudo $HOME/VMs/Loki/loki-start-headless"
 
   # tmux
   function tma()    { tmux attach -t $1; }
@@ -427,7 +437,7 @@ function steam-arch {
   #[[ -s "/Users/$USER/.rvm/scripts/rvm" ]] && source "/Users/$USER/.rvm/scripts/rvm"  # This loads RVM into a shell session.
 
   # Setup paths for virtualenv
-  if [ -d ~/.virtualenvs ]; then
+  if [ -d $HOME/.virtualenvs ]; then
 	  export WORKON_HOME=$HOME/.virtualenvs
 	  source /usr/local/bin/virtualenvwrapper.sh
 	  export PIP_VIRTUALENV_BASE=$WORKON_HOME

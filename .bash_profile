@@ -9,8 +9,8 @@
 # for now we will have the profile match the rc, later I will add things like system info messages so you see them on login
 
 
-if [ -f ./bashrc ]; then
-	source ~/.bashrc
+if [ -f $HOME/.bashrc ]; then
+	source $HOME/.bashrc
 fi
 
 
@@ -32,7 +32,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 
 # Run the bashrc
-source ~/.bashrc
+source $HOME/.bashrc
 
 
 
