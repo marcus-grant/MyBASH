@@ -107,6 +107,13 @@
             PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
     fi
 
+    #if [ -f `which powerline-daemon` ]; then
+    #    powerline-daemon -q
+    #    POWERLINE_BASH_CONTINUATION=1
+    #    POWERLINE_BASH_SELECT=1
+    #    . /usr/local/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
+    #fi
+
   # DEPRECATED - No longer using
   # Finally call the function and our prompt is all pretty
   #prompt

@@ -33,6 +33,3 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 # Run the bashrc
 source $HOME/.bashrc
-
-
-
