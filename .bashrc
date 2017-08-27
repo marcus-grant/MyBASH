@@ -125,6 +125,23 @@
 #
 ########
 
+# Some configurations differ based on the host OS type
+# The variable OS_LOCAL will be used to configure based on if:
+# 'mac', 'linux', 'win', 'bsd', 'cygwin'
+if [ "$(uname)" == "Darwin" ]; then
+    # Do something under Mac OS X platform
+    OS_LOCAL="mac"
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    # Do something under GNU/Linux platform
+    OS_LOCAL="linux"
+elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+    # Do something under 32 bits Windows NT platform
+    OS_LOCAL="win"
+elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
+# Do something under 64 bits Windows NT platform
+    OS_LOCAL="win"
+fi
+
 # Terminal environment: Termite invokes its own, use xterm-256color instead
 export TERM=xterm-256color
 
@@ -170,21 +187,26 @@ export EDITOR="vim"
     export PATH="$HOME/.anaconda3/bin:$PATH"
 
     # eval keychain to update ssh-agent with private keys
-    unameOut="$(uname -s)"
-    case "${unameOut}" in
-        Linux*)     
-            machine=Linux
-            if [ -f $HOME/.ssh/git.key ]; then
-                eval $(keychain --eval --quiet $HOME/.ssh/git.key )
-	        else
-		        echo "Attempted to add git keychain, but no keyfile exists, ignoring..."
-	        fi
-        ;;
-        Darwin*)    machine=Mac;;
-        CYGWIN*)    machine=Cygwin;;
-        MINGW*)     machine=MinGw;;
-        *)          machine="UNKNOWN:${unameOut}"
-    esac
+    if [ $OS_LOCAL == "linux" ]; then
+        if [ -f $HOME/.ssh/git.key ]; then
+            eval $(keychain --eval --quiet $HOME/.ssh/git.key )
+        fi
+    fi
+#    unameOut="$(uname -s)"
+#    case "${unameOut}" in
+#        Linux*)     
+#            machine=Linux
+#            if [ -f $HOME/.ssh/git.key ]; then
+#                eval $(keychain --eval --quiet $HOME/.ssh/git.key )
+#	        else
+#		        echo "Attempted to add git keychain, but no keyfile exists, ignoring..."
+#	        fi
+#        ;;
+#        Darwin*)    machine=Mac;;
+#        CYGWIN*)    machine=Cygwin;;
+#        MINGW*)     machine=MinGw;;
+#        *)          machine="UNKNOWN:${unameOut}"
+#    esac
 
 
 
@@ -362,7 +384,11 @@ view-markup ()
 
   # LS
   # Set all common options desired on ls first by replacing the default ls command, here, I want to force color always on ls
-  alias ls='ls --color=always'
+  if [ $OS_LOCAL == "mac" ]; then
+      alias ls='ls -G'
+  else
+      alias ls='ls --color=always'
+  fi
   alias l='ls -lahG'
   alias ll='ls -FGLAhp' # my preffered ls call, but I'm calling it ll instead of replacing
   alias lt='ls -laHGt'
