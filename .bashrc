@@ -242,7 +242,7 @@ function extract () {
 # here is a function that takes a string USER/REPOSITORY as only argument
 function gcs () {
 	local argument=$1
-	gitCommand="git clone git@github.com:"$argument".git"
+	gitCommand="git clone git@github.com:marcus-grant/"$argument".git"
 	echo "Executing command: $gitCommand"
 	$gitCommand
 }
