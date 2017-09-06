@@ -187,6 +187,13 @@ export EDITOR="vim"
     esac
 
 
+    # Add $HOME/.dotfiles/sysadmin-scripts to PATH for helper scripts
+    # Only do it if that directory is present
+    if [ -d $HOME/.dotfiles/sysadmin-scripts ]; then
+        PATH=$PATH:$HOME/.dotfiles/sysadmin-scripts
+    fi
+
+
 
 ########
 #
