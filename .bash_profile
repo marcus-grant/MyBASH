@@ -29,7 +29,8 @@ fi
 
 # Rust's cargo package manager needs for there to be some kind of standard path
 export PATH="$HOME/.cargo/bin:$PATH"
-
+export PATH="$HOME/.local/share/anaconda3/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 
 # Run the bashrc
 source $HOME/.bashrc
