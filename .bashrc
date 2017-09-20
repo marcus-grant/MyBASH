@@ -166,10 +166,15 @@ export EDITOR="vim"
     # For example, mine is:
     # /Users/avi/.rvm/gems/ruby-1.9.3-p392/bin:/Users/avi/.rvm/gems/ruby-1.9.3-p392@global/bin:/Users/avi/.rvm/rubies/ruby-1.9.3-p392/bin:/Users/avi/.rvm/bin:/usr/local:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/local/mysql/bin:/usr/local/share/python:/bin:/usr/sbin:/sbin:
    # home bin path
-   export PATH="$HOME/bin:$PATH"
+   #TODO: Remove these entries if keeping them in profile is satisfactory
+   #export PATH="$HOME/bin:$PATH"
+
+   #TODO: Validate this for functionality and remove if needed
+   # add Soundcloud2000 variable for API Key
 
     # Anaconda (change for OS)
-    export PATH="$HOME/.local/share/anaconda3/bin:$PATH"
+    # TODO: Moving to profile, remove if satisfactory
+    #export PATH="$HOME/.local/share/anaconda3/bin:$PATH"
 
     # eval keychain to update ssh-agent with private keys
     unameOut="$(uname -s)"
@@ -452,5 +457,3 @@ function steam-arch {
 	  export PIP_VIRTUALENV_BASE=$WORKON_HOME
   fi
 
-# added by Miniconda3 4.3.21 installer
-export PATH="/home/marcus/.local/anaconda3/bin:$PATH"
