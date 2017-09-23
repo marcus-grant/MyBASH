@@ -30,6 +30,9 @@ fi
 # Rust's cargo package manager needs for there to be some kind of standard path
 export PATH="$HOME/.cargo/bin:$PATH"
 
+# Go's GOPATH
+export PATH="$PATH:$HOME/bin/go/bin"
+
 
 # Run the bashrc
 source $HOME/.bashrc
