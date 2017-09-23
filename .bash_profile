@@ -31,6 +31,8 @@ fi
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/share/anaconda3/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
+# Go's GOPATH
+export PATH="$PATH:$HOME/bin/go/bin"
 
 # Run the bashrc
 source $HOME/.bashrc

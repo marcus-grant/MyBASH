@@ -401,6 +401,33 @@ view-markup ()
   alias gcam="git commit -am"
   alias gbb="git branch -b"
 
+  # TODO: Doesn't work -- Worth the effort????
+  #function gacm() {
+  #    local num_additions=$(($#-1))
+  #    local additions=${@:1:$num_additions}
+  #    local commit_message=${!#}
+#
+#      echo 
+#      echo "Adding, then committing staged changes using git:"
+#      echo "================================================="
+#      echo "message: $message"
+#      echo "files: $additions"
+#      echo 
+#      echo "Are these files & message correct?"
+#      echo "Hit [Enter] to confirm, or any other key to discard!: "
+#
+#      read -s -n 1 key
+#      if [[ $key = "" ]]; then
+#          echo
+#          echo "Adding, and committing!"
+#          echo
+#      else
+#          exit 1
+#      fi
+#
+#      git add $additions && git commit -m $commit_message
+#  }
+
 
   # QEMU-KVM virtual machine launch aliases
   alias loki="sudo $HOME/VMs/Loki/loki-start"
