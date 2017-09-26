@@ -434,10 +434,11 @@ view-markup ()
   alias loki-headless="sudo $HOME/VMs/Loki/loki-start-headless"
 
   # tmux
-  function tma()    { tmux attach -t $1; }
+  # NOTE: Updated to include '-2' option to force the screen-256color option
+  function tma()    { tmux attach -2 -t $1; }
   function tml()    { tmux list-sessions; }
-  function tmn()    { tmux new -s $1; }
-  function tms()    { tmux switch -t $1; }
+  function tmn()    { tmux new -2 -s $1; }
+  function tms()    { tmux switch -2 -t $1; }
   function tmk()    { tmux kill-session -t $1; }
   function tmr()    { tmux rename-session -t $1 $2; }
   function tmlk()   { tmux list-keys; }
