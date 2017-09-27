@@ -435,10 +435,10 @@ view-markup ()
 
   # tmux
   # NOTE: Updated to include '-2' option to force the screen-256color option
-  function tma()    { tmux attach -2 -t $1; }
+  function tma()    { tmux -2 attach -t $1; }
   function tml()    { tmux list-sessions; }
-  function tmn()    { tmux new -2 -s $1; }
-  function tms()    { tmux switch -2 -t $1; }
+  function tmn()    { tmux -2 new -s $1; }
+  function tms()    { tmux -2 switch -t $1; }
   function tmk()    { tmux kill-session -t $1; }
   function tmr()    { tmux rename-session -t $1 $2; }
   function tmlk()   { tmux list-keys; }
