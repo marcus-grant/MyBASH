@@ -37,5 +37,6 @@ export PATH="$PATH:$HOME/bin/go/bin"
 # Run the bashrc
 source $HOME/.bashrc
 
-
-
+# set xdg's
+# TODO: find better way to standardize this across systems particularly on arch
+#export XDG_CONFIG_HOME="${XDG_CONFIG_HOME}:$HOME/.config"
