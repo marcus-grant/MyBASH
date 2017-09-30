@@ -373,11 +373,16 @@ view-markup ()
   alias pydev='cd $HOME/code/python'
   alias webdev='cd $HOME/code/web'
   alias aidev='cd $HOME/code/ai'
-  alias dev-notes='cd $HOME/Documents/dev-notes'
+  alias dev-notes='cd $HOME/documents/dev-notes'
   alias dotfiles='cd $HOME/.dotfiles'
   alias ..='cd ..'
   alias ...='cd ../..'
   alias ....='cd ../../..'
+
+# different aliases based on if it's a mac
+  if [ $machine == 'mac' ]; then
+    alias dev-notes='cd $HOME/Documents/dev-notes'
+  fi
 
   #Application Starters
   alias oxw='open *.xcw*'
