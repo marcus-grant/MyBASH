@@ -261,6 +261,15 @@ function gcs () {
 	$gitCommand
 }
 
+# Git Pull All - gpa - pulls all branches to local from remote
+function gpa () {
+  git branch -r | grep -v '\->' | while read remote;
+    do git branch --track "${remote#origin/}" "$remote";
+    done
+  git fetch --all
+  git pull --all
+}
+
 # A helper to pipe commands into python for immediate interpretation
 # TODO: figure out proper way to handle newlines, quotes, and spaces
 function pypipe()
@@ -399,7 +408,6 @@ view-markup ()
   alias gb="git branch"
   alias gba="git branch -a"
   alias gcam="git commit -am"
-  alias gbb="git branch -b"
 
   # TODO: Doesn't work -- Worth the effort????
   #function gacm() {
