@@ -175,10 +175,25 @@ function extract () {
 # Because I always forget the address format for git clones using SSH -
 # here is a function that takes a string USER/REPOSITORY as only argument
 function gcs () {
-	local argument=$1
-	gitCommand="git clone git@github.com:marcus-grant/"$argument".git"
-	echo "Executing command: $gitCommand"
-	$gitCommand
+  local GIT_ROOT="git@github.com:marcus-grant"
+  local GIT_URL="$GIT_ROOT/$1.git"
+  echo
+  echo "Cloning from $GIT_URL ......."
+  echo
+  git clone $GIT_URL
+  echo
+  echo "Done cloning!"
+}
+
+# Easier way to clone a personal repository ussing https
+# Only argument is the repository name from my personal github acct. marcus-grant
+function gch () {
+  local GIT_ROOT="https://github.com/marcus-grant"
+  local GIT_URL="$GIT_ROOT/$1"
+  echo "Cloning from $GIT_URL ......."
+  git clone $GIT_URL
+  echo
+  echo "Done cloning!"
 }
 
 # Git Pull All - gpa - pulls all branches to local from remote
