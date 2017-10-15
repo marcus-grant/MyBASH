@@ -190,6 +190,19 @@ function gpa () {
   git pull --all
 }
 
+# Helper function to recursively apply the right plex permissions
+function plex-permissions()
+{
+  echo
+  echo "Recursively changing permissions of $1 to +r +x, & owned by marcus:media"
+  echo
+  chown -R marcus:media "$1"
+  chmod -R +x "$1"
+  echo
+  echo "Done! Plex servers should now be able to index & gather metadata for this folder."
+  echo
+}
+
 # A helper to pipe commands into python for immediate interpretation
 # TODO: figure out proper way to handle newlines, quotes, and spaces
 function pypipe()
@@ -312,6 +325,7 @@ view-markup ()
   # Set all common options desired on ls first by replacing the default ls command, here, I want to force color always on ls
   alias ls='ls --color=always'
   alias l='ls -lahG'
+  alias la='ls -lah'
   alias ll='ls -FGLAhp' # my preffered ls call, but I'm calling it ll instead of replacing
   alias lt='ls -laHGt'
 
