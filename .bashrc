@@ -380,7 +380,13 @@ view-markup ()
   alias ....='cd ../../..'
 
 # different aliases based on if it's a mac
-  if [ $machine == 'mac' ]; then
+  if [ $machine == 'Mac' ]; then
+    alias dev='cd $HOME/Code'
+    alias pydev='cd $HOME/Code/python'
+    alias webdev='cd $HOME/Code/web'
+    alias aidev='cd $HOME/Code/ai'
+    alias dev-notes='cd $HOME/Cocuments/dev-notes'
+    alias dotfiles='cd $HOME/.dotfiles'
     alias dev-notes='cd $HOME/Documents/dev-notes'
   fi
 
@@ -390,10 +396,15 @@ view-markup ()
 
   # LS
   # Set all common options desired on ls first by replacing the default ls command, here, I want to force color always on ls
-  alias ls='ls --color=always'
   alias l='ls -lahG'
   alias ll='ls -FGLAhp' # my preffered ls call, but I'm calling it ll instead of replacing
   alias lt='ls -laHGt'
+  
+  #ls aliases that differ if not linux
+  if [ $machine == 'Mac' ]; then
+    alias l='ls -lahG'
+    alias ll='ls -FGLAhp'
+  fi
 
   # Grep
   alias grep='grep --color=auto'
