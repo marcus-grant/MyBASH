@@ -2,6 +2,42 @@
 
 This is my repository to store my personal bash configurations. They are divided into different files so it is easier to maintain different versions. They are also stored in ~/SHELL/mybash/ so that git can work properly, and they are sourced in .bash_profile and .bashrc by single line references so that they reference whatever version I'd like. There will be a write up for my blog for how I set this config up, how I use it, and why coming shortly, and its contents will be here and on my [personal site/blog](http://thepatternbuffer.com).
 
+## Files
+*heavily inspired by* [alrra/dotfiles](https://github.com/alrra/dotfiles)
+This bash configuration seperates all of the configurations into different files based on the context:
+[x] `bash_profile`: the entry point for the login shell
+[x] `bashrc`: the standard entry point for non-login shell
+[x] `bash_exports`: custom dotfile that has all of bash's exports
+[x] `bash_aliases`: custom file that has all bash aliases as called by bashrc
+[x] `bash_functions`: custom file that has all bash functions called by bashrc
+[ ] `bash_options`: `shopt` tweaks to the shell, look at alrra/dotfiles for ideas
+
+The `bash_profile` will only source `bash_exports` to load in all global variables needed that are customized for this configuration. Then in `bashrc` `bash_aliases`, `bash_functions`, `bash_general` & `bash_options` get sourced to create the proper non-login shell so that it's easier to manage all the numerous customizations this configuration has. On top of those sources listed, `bashrc` will also source a symlink, `prompt-link` which will point to the right script file inside of `./prompts` to use one of several different prompt options.
+
+
+## Prompts
+
+
+## Aliases
+
+
+## Functions
+
+
+## TODO
+***Note*** *many other todos have been completed, but only recently have they been getting tracked inside this README*
+[ ] add *golang* version of powerline prompt for better latency
+[ ] combine the functionality of `choose-prompt.sh` with `prepare.sh` since this doesn't need to be run several times. Also have the bash prompt be the default option
+[ ] add grep colors support based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/colors)
+[ ] add autocomplete functionality based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/autocomplete)
+[ ] add bash options into `bash_options.sh` based off [alrra/dotfiles](https://github.com/alrra/dotfiles/blob/master/src/shell/bash_options)
+
+
+## Change History
+- **History starts @ 2017 - 11 - 12** Lots of work has been done previously however
+- **2017 - 11 - 12:** Restructure all configs to be more organized
+  - `bash_exports`, `bash_aliases`, `bash_functions`, `bash_options` & `bash_general` have been created to seperate 
+# OLD VERSION, KEEP WHAT IS USEFUL IN REWRITE DELETE REST
 Whenever this repository is being used for the first time, a few things will need to be done first:
 1. Run `git clone https://github.com/marcus-grant/mybash` in your `~/` directory, aka, your home
 2. Clear .bashrc and paste this into it and save:
