@@ -1,0 +1,3 @@
+[submodule "prompts/powerline-shell"]
+	path = prompts/powerline-shell
+	url = https://github.com/banga/powerline-shell.git
