@@ -37,6 +37,11 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
 - **History starts @ 2017 - 11 - 12** Lots of work has been done previously however
 - **2017 - 11 - 12:** Restructure all configs to be more organized
   - `bash_exports`, `bash_aliases`, `bash_functions`, `bash_options` & `bash_general` have been created to seperate 
+  - `MACHINE` variable now is exported based off which host OS this is run from
+    - This is important for several exports, aliases, & functions that will be different due to host OS type
+  - `BASH_CONFIGS_ROOT` variable now gets defined in `bash_profile` to make getting config paths easier
+
+
 # OLD VERSION, KEEP WHAT IS USEFUL IN REWRITE DELETE REST
 Whenever this repository is being used for the first time, a few things will need to be done first:
 1. Run `git clone https://github.com/marcus-grant/mybash` in your `~/` directory, aka, your home
