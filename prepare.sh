@@ -22,6 +22,9 @@ get-script-dir ()
 }	# ----------  end of function get-script-dir  ----------
 
 # TODO: edit to set powerline shell inside dot folder
+# TODO: Refactor path variable names for better readability
+#       - Use names like SRC, DST to make more clear which is the real file
+#            and which is the link path
 dotfile_path=$(get-script-dir)
 real_config_path=$dotfile_path/bashrc
 home_path=$HOME
@@ -31,6 +34,9 @@ profile_origin_path=$dotfile_path/bash_profile
 powerline_origin_path=$dotfile_path/powerline-shell.py
 powerline_link_path=$HOME/.powerline-shell.py
 
+# TODO: V
+# Style the console output better and put the removal steps in line with
+# corresponding linking steps
 echo "Preparing environment for BASH configuration."
 echo "Checking if previous .bashrc exists."
 
