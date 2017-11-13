@@ -20,7 +20,7 @@ function main() {
     BASH_PROFILE_SRC=$BASH_DOTFILES_PATH/bash_profile
     BASH_PROFILE_DST=$HOME/.bash_profile
     PROMPTS_DIR_PATH=$BASH_DOTFILES_PATH/prompts
-    DEFAULT_PROMPT_SRC=$PROMPTS_DIR_PATH/bash-powerline/bash-powerline.sh
+    DEFAULT_PROMPT_SRC=$PROMPTS_DIR_PATH/bash-powerline.sh
     PROMPT_LINK_DST=$PROMPTS_DIR_PATH/prompt-link
 
     # TODO: V
@@ -35,6 +35,10 @@ function main() {
     handle-bash-profile
 
     set-default-prompt
+
+    update-submodules
+
+    source-bash-profile
 
     console-print-outro
 
@@ -78,7 +82,7 @@ function console-print-intro() {
     if [[ "$WILL_CONTINUE" = "" ]]; then exit 1;
     elif [[ "$WILL_CONTINUE" = "n" ]]; then exit 1;
     elif [[ "$WILL_CONTINUE" = "N" ]]; then exit 1;
-    fi; return 0
+    fi; echo; return 0
 }
 
 # checks for valid yes/no/default response and returns by exit code
@@ -104,25 +108,22 @@ function check-file-exists-exit() {
 
 function handle-bashrc() {
     check-file-exists-exit $BASHRC_SRC
-    if [ -f $BASHRC_DST ]; then
-        echo "Previous ~/.bashrc exists, removing it."
-        rm $BASHRC_DST
-    fi
+    # this removes the file silently, incase it doesn't exist
+    rm $BASHRC_DST 2> /dev/null
     echo "Creating new symlink for .bashrc"
     echo "$BASHRC_DST -> $BASHRC_SRC"
     ln -s $BASHRC_SRC $BASHRC_DST
+    echo "...done"
     echo
 }
 
 function handle-bash-profile() {
     check-file-exists-exit $BASH_PROFILE_SRC
-    if [ -f $BASH_PROFILE_DST ]; then
-        echo "Previous bash_profile symlink exists, removing it."
-        rm $BASH_PROFILE_DST
-    fi
+    rm $BASH_PROFILE_DST 2> /dev/null
     echo "Creating new symlink for .bash_profile"
     echo "$BASH_PROFILE_DST -> $BASH_PROFILE_SRC"
     ln -s $BASH_PROFILE_SRC $BASH_PROFILE_DST
+    echo "...done"
     echo
 }
 
@@ -134,7 +135,21 @@ function set-default-prompt(){
       rm $PROMPT_LINK_DST
     fi
     ln -s $DEFAULT_PROMPT_SRC $PROMPT_LINK_DST
-    echo "...done."
+    echo "...done"
+    echo
+}
+
+function update-submodules(){
+    echo "Updating submodules..."
+    git submodule update --init --recursive
+    echo "...done"
+    echo
+}
+
+function source-bash-profile(){
+    echo "Sourcing ~/.bash_profile to ensure new settings are available..."
+    source $HOME/.bash_profile
+    echo "...done"
     echo
 }
 
