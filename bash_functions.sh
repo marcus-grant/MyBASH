@@ -191,34 +191,6 @@ view-markup ()
 }	# ----------  end of function view-markup  ----------
 
 
-  # TODO: Doesn't work -- Worth the effort????
-  #function gacm() {
-  #    local num_additions=$(($#-1))
-  #    local additions=${@:1:$num_additions}
-  #    local commit_message=${!#}
-#
-#      echo 
-#      echo "Adding, then committing staged changes using git:"
-#      echo "================================================="
-#      echo "message: $message"
-#      echo "files: $additions"
-#      echo 
-#      echo "Are these files & message correct?"
-#      echo "Hit [Enter] to confirm, or any other key to discard!: "
-#
-#      read -s -n 1 key
-#      if [[ $key = "" ]]; then
-#          echo
-#          echo "Adding, and committing!"
-#          echo
-#      else
-#          exit 1
-#      fi
-#
-#      git add $additions && git commit -m $commit_message
-#  }
-
-
   # tmux
   # NOTE: Updated to include '-2' option to force the screen-256color option
   function tma()    { tmux -2 attach -t $1; }
@@ -236,6 +208,3 @@ view-markup ()
 function steam-arch {
 	LD_PRELOAD='/usr/$LIB/libstdc++.so.6 /usr/$LIB/libgcc_s.so.1 /usr/$LIB/libxcb.so.1 /usr/$LIB/libgpg-error.so' steam
 }
-# Case-Insensitive Auto Completion
-  bind "set completion-ignore-case on"
-
