@@ -1,13 +1,49 @@
 #!/bin/bash
 
+# 
+# prepare.sh
+# by Marcus Grant March 2016
+# marcus.grant@patternbuffer.io
+#
+# Description:
+# A script used along with my bash configurations 
+# git repository ( https://github.com/marcus-grant/mybash ).
+# It links all configurations to their rightful place in the home directory
+#
 
-#---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  get-script-dir
-#   DESCRIPTION:  Gets the current script directory
-#    PARAMETERS:  
-#       RETURNS:  
-#-------------------------------------------------------------------------------
-get-script-dir ()
+# I prefer to forward declare functions whenever it's advisable,
+# so here, 'main' is the main execution function, that gets called at the end
+function main() {
+    BASH_DOTFILES_PATH=$(get-script-dir)
+    BASHRC_SRC=$BASH_DOTFILES_PATH/bashrc
+    BASHRC_DST=$HOME/.bashrc
+    BASH_PROFILE_SRC=$BASH_DOTFILES_PATH/bash_profile
+    BASH_PROFILE_DST=$HOME/.bash_profile
+    PROMPTS_DIR_PATH=$BASH_DOTFILES_PATH/prompts
+    DEFAULT_PROMPT_SRC=$PROMPTS_DIR_PATH/bash-powerline/bash-powerline.sh
+    PROMPT_LINK_DST=$PROMPTS_DIR_PATH/prompt-link
+
+    # TODO: V
+    # Style the console output better and put the removal steps in line with
+    # corresponding linking steps
+
+    # Print an intro message and warn about overwritting old configs
+    console-print-intro
+
+    handle-bashrc
+
+    handle-bash-profile
+
+    set-default-prompt
+
+    console-print-outro
+
+    exit 0
+}
+
+# This function gets the path to the directory where this script resides,
+# which happens to be the root for all the bash configs.
+function get-script-dir ()
 {
    	source="${BASH_SOURCE[0]}"
 	while [ -h "$source" ]; do # resolve $source until the file is no longer a symlink
@@ -19,61 +55,95 @@ get-script-dir ()
 	done
 	dir="$( cd -P "$( dirname "$source" )" && pwd )"
 	echo $dir
-}	# ----------  end of function get-script-dir  ----------
+}
 
-# TODO: edit to set powerline shell inside dot folder
-# TODO: Refactor path variable names for better readability
-#       - Use names like SRC, DST to make more clear which is the real file
-#            and which is the link path
-dotfile_path=$(get-script-dir)
-real_config_path=$dotfile_path/bashrc
-home_path=$HOME
-link_path=$home_path/.bashrc
-profile_link_path=$home_path/.bash_profile
-profile_origin_path=$dotfile_path/bash_profile
-powerline_origin_path=$dotfile_path/powerline-shell.py
-powerline_link_path=$HOME/.powerline-shell.py
+# Function to print to console an intro message and to warn about overwritting
+# the original bashrc and bash_profile files, and asks if they want to continue
+function console-print-intro() {
+    echo
+    echo "Preparing local environment for BASH configuration."
+    echo "!!! NOTE !!!"
+    echo "This will delete current ~/.bashrc and ~/.bash_profile files."
+    echo "Backup if you want to keep these files around before continuing..."
+    echo "Would you like to continue? [y/N]: "
+    read -s -n 1 WILL_CONTINUE
+    # make sure that a valid y/n/RETURN is given as response
+    while ! is-valid-y-n $WILL_CONTINUE; do
+      echo
+      echo "That was not a valid response."
+      echo "Please specify if you'd like to continue [y/N]: "
+      read -s -n 1 WILL_CONTINUE
+    done
+    # exit the program if a 'n', 'N', or return key was given
+    if [[ "$WILL_CONTINUE" = "" ]]; then exit 1;
+    elif [[ "$WILL_CONTINUE" = "n" ]]; then exit 1;
+    elif [[ "$WILL_CONTINUE" = "N" ]]; then exit 1;
+    fi; return 0
+}
 
-# TODO: V
-# Style the console output better and put the removal steps in line with
-# corresponding linking steps
-echo "Preparing environment for BASH configuration."
-echo "Checking if previous .bashrc exists."
+# checks for valid yes/no/default response and returns by exit code
+function is-valid-y-n() {
+  # enter is valid
+  if [[ "$1" = "" ]]; then return 0;
+  elif [[ "$1" = "y" ]]; then return 0;
+  elif [[ "$1" = "Y" ]]; then return 0;
+  elif [[ "$1" = "n" ]]; then return 0;
+  elif [[ "$1" = "N" ]]; then return 0;
+  fi; return 1
+}
 
-if [ -f $link_path ]; then
-	echo "Previous bash file exists, backing it up with .bak suffix"
-	mv $link_path $linkPath.bak
-fi
+# a function that checks if the given path exists and exits with message if not
+function check-file-exists-exit() {
+    if [ ! -f $1 ]; then
+      echo "[ERROR]: $1 doesn't exist!"
+      echo "This is a programming error, please fix it!"
+      exit 1
+    fi
+    return 0
+}
 
-if [ -L $link_path ]; then
-	echo "Previous symlink exists, removing it."
-	rm $link_path
-fi
+function handle-bashrc() {
+    check-file-exists-exit $BASHRC_SRC
+    if [ -f $BASHRC_DST ]; then
+        echo "Previous ~/.bashrc exists, removing it."
+        rm $BASHRC_DST
+    fi
+    echo "Creating new symlink for .bashrc"
+    echo "$BASHRC_DST -> $BASHRC_SRC"
+    ln -s $BASHRC_SRC $BASHRC_DST
+    echo
+}
 
-if [ -f $profile_link_path ]; then
-    echo "Previous bash_profile exists, removing it."
-    rm $profile_link_path
-fi
+function handle-bash-profile() {
+    check-file-exists-exit $BASH_PROFILE_SRC
+    if [ -f $BASH_PROFILE_DST ]; then
+        echo "Previous bash_profile symlink exists, removing it."
+        rm $BASH_PROFILE_DST
+    fi
+    echo "Creating new symlink for .bash_profile"
+    echo "$BASH_PROFILE_DST -> $BASH_PROFILE_SRC"
+    ln -s $BASH_PROFILE_SRC $BASH_PROFILE_DST
+    echo
+}
 
-if [ -f $profile_link_path ]; then
-    echo "Previous bash_profile symlink exists, removing it."
-    rm $profile_link_path
-fi
+function set-default-prompt(){
+    check-file-exists-exit $DEFAULT_PROMPT_SRC
+    echo "Linking default prompt config (bash-powerline) to prompt-link."
+    if [ -e $PROMPT_LINK_DST ]; then 
+      echo "Previous prompt-link exists, removing it."
+      rm $PROMPT_LINK_DST
+    fi
+    ln -s $DEFAULT_PROMPT_SRC $PROMPT_LINK_DST
+    echo "...done."
+    echo
+}
 
+function console-print-outro(){
+    echo "Dotfile preperation complete!"
+    echo "Exiting."
+    echo
+}
 
-echo "Creating symlink for .bashrc"
-echo "$link_path -> $real_config_path"
-ln -s $real_config_path $link_path
-
-echo "Creating symlink for .bash_profile"
-echo "$profile_link_path -> $profile_origin_path"
-ln -s $profile_origin_path $profile_link_path
-echo
-
-echo "Creating symlink for ~/powerline-shell.py"
-rm ~/powerline-shell.py
-ln -s $powerline_origin_path $powerline_link_path
-echo
-
-echo "Dotfile preperation complete!"
-exit 0
+# Exectution of script continues once everything in the script has been read
+main
+unset main
