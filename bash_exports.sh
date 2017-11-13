@@ -65,17 +65,6 @@ if [ -d $HOME/.virtualenvs ]; then
 fi
 
 
-# TODO: Add an alternative profile for when intended to be installed on remote server, git ssh keys shouldn't be stored there, use HTTPS instead
-# TODO: OR consider a better private key passwording method
-# if a linux system, add all keychains in if statement below with paths
-if [ $MACHINE == "linux" ]; then
-  if [ -f $HOME/.ssh/git.key ]; then
-      eval $(keychain --eval --quiet $HOME/.ssh/git.key )
-  else
-      echo "Attempted to add git keychain, but no keyfile exists, ignoring..."
-  fi
-fi
-
 # set xdg's
 # TODO: find better way to standardize this across systems particularly on arch
 #export XDG_CONFIG_HOME="${XDG_CONFIG_HOME}:$HOME/.config"

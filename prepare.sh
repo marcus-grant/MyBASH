@@ -36,7 +36,8 @@ function main() {
 
     handle-bash-profile
 
-    handle-profile
+    # TODO: investigate why having profile source bash_exports causing no boot
+    # handle-profile
 
     set-default-prompt
 

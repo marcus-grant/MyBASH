@@ -4,12 +4,6 @@
 # written by Marcus Grant (2016) of thepatternbuffer.io
 #
 
-# run archey3 if it exists
-# TODO: Add an else for when archey isn't there, that at the very least includes uname and hostname
-if hash archey3 2>/dev/null; then
-    archey3
-fi
-
 # get the bash dotfiles directory path so other configs can use it
 # source profile loads environment stuff including id'ing host-specic stuff
 export BASH_CONFIGS_ROOT=$(dirname "$(readlink ~/.bash_profile)")

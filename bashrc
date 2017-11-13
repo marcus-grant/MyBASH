@@ -7,7 +7,10 @@
 ########
 
 # make sure BASH_CONFIGS_ROOT is exported
-# export BASH_CONFIGS_ROOT=$(dirname "$(readlink ~/.bash_profile)")
+export BASH_CONFIGS_ROOT=$(dirname "$(readlink ~/.bash_profile)")
+
+# need to get all other exports first
+source $BASH_CONFIGS_ROOT/bash_exports.sh
 
 # get absolute path to prompt link & use prompt link to get prompt
 source "$BASH_CONFIGS_ROOT/prompts/prompt-link"
@@ -23,3 +26,4 @@ source "$BASH_CONFIGS_ROOT/bash_general.sh"
 
 # source bash internal options
 # TODO: create it
+
