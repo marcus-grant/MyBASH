@@ -26,7 +26,7 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
 
 ## TODO
 ***Note*** *many other todos have been completed, but only recently have they been getting tracked inside this README*
-- [ ] add *golang* version of powerline prompt for better latency
+- [x] add *golang* version of powerline prompt for better latency
 - [ ] combine the functionality of `choose-prompt.sh` with `prepare.sh` since this doesn't need to be run several times. Also have the bash prompt be the default option
 - [ ] add grep colors support based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/colors)
 - [ ] add autocomplete functionality based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/autocomplete)
@@ -41,6 +41,19 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
     - This is important for several exports, aliases, & functions that will be different due to host OS type
   - `BASH_CONFIGS_ROOT` variable now gets defined in `bash_profile` to make getting config paths easier
   - `prompts/` now has all prompt configs including submodules for more complex dynamic prompts
+  - `prepare.sh` refactor & default prompt linking
+    - Refactored so that every task is now a forward defined function
+    - Refactored variable names so they're more readable, `*_SRC` is now an original file to be linked & `*_DST` is now for links
+    - Now creates `prompt-link` so that it links to `bash-powerline` submodule as the default prompt since it's guaranteed to work fast on any UNIX system since it's entirely a bash script
+- **2017 - 11 - 13:** powerline-go
+  - Install [justjanne/powerline-go](https://github.com/justjanne/powerline-go)
+  - `prompts/go-prompt.sh` now uses options inside `prompts/go-prompt-options.sh` to create a go-based powerline prompt
+  - `prompts/go-prompt-options.sh` has a nicely commented set of variables containing all possible `powerline-go` options which are then included in `PROMPT_OPTS` within the file to include as many or few options to customize the powerline
+  - `.gitignore` now ignores the `prompts/prompt-link` so it doesn't change the local prompt
+  - `prompts/powerline-go` is the binary for launching go, which has to be included in `GOPATH` variable
+    - this also means that `prompts/powerline-go` needs to be downloaded manually to be used
+  - `bash_exports` now has improved `PATH`, `GOPATH` & `GOBIN` which makes `powerline-go` work and makes managing go projects easier
+    - *i.e.* they're all inside `~/bin/go`
 
 
 # OLD VERSION, KEEP WHAT IS USEFUL IN REWRITE DELETE REST

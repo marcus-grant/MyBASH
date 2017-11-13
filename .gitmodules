@@ -1,3 +1,6 @@
 [submodule "prompts/powerline-shell"]
 	path = prompts/powerline-shell
 	url = https://github.com/banga/powerline-shell.git
+[submodule "prompts/bash-powerline"]
+	path = prompts/bash-powerline
+	url = https://github.com/riobard/bash-powerline.git
