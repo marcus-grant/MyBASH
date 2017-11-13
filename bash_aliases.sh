@@ -23,9 +23,11 @@ elif [[ "$MACHINE" == 'linux' ]]; then
   alias dev-notes='cd $HOME/documents/dev-notes'
 fi
 
-#Application Starters
-alias oxw='open *.xcw*'
-alias oxp='open *.xcod*'
+# MAC open xcode
+if [[ "$MACHINE" == "mac" ]]; then
+  alias oxw='open *.xcw*'
+  alias oxp='open *.xcod*'
+fi
 
 # LS
 # Set all common options desired on ls first by replacing the default ls command, here, I want to force color always on ls
