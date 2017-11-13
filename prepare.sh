@@ -19,6 +19,8 @@ function main() {
     BASHRC_DST=$HOME/.bashrc
     BASH_PROFILE_SRC=$BASH_DOTFILES_PATH/bash_profile
     BASH_PROFILE_DST=$HOME/.bash_profile
+    PROFILE_SRC=$BASH_DOTFILES_PATH/profile
+    PROFILE_DST=$HOME/.profile
     PROMPTS_DIR_PATH=$BASH_DOTFILES_PATH/prompts
     DEFAULT_PROMPT_SRC=$PROMPTS_DIR_PATH/bash-powerline.sh
     PROMPT_LINK_DST=$PROMPTS_DIR_PATH/prompt-link
@@ -33,6 +35,8 @@ function main() {
     handle-bashrc
 
     handle-bash-profile
+
+    handle-profile
 
     set-default-prompt
 
@@ -127,6 +131,15 @@ function handle-bash-profile() {
     echo
 }
 
+function handle-profile() {
+    check-file-exists-exit $PROFILE_SRC
+    rm $PROFILE_DST 2> /dev/null
+    echo "Creating new symlink for .bash_profile"
+    echo "$PROFILE_DST -> $PROFILE_SRC"
+    ln -s $PROFILE_SRC $PROFILE_DST
+    echo "...done"
+    echo
+}
 function set-default-prompt(){
     check-file-exists-exit $DEFAULT_PROMPT_SRC
     echo "Linking default prompt config (bash-powerline) to prompt-link."
