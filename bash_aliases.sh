@@ -4,9 +4,6 @@
 #
 ########
 
-# load in a string denoting which OS-type is being used in 'machine'
-machine=$1
-
 #CD - All cd aliases for quickly changing directories
 #  alias ios='cd $HOME/Dropbox/Dev/iOS'
 alias dev='cd $HOME/code'
@@ -20,9 +17,9 @@ alias ....='cd ../../..'
 
 # different aliases based on if it's a mac
 # TODO: Verify that this works after splitting aliases into own file and passing args
-if [ $MACHINE == 'mac' ]; then
+if [[ "$MACHINE" == 'mac' ]]; then
   alias dev-notes='cd $HOME/Documents/dev-notes'
-elif [ $MACHINE == 'linux' ]; then
+elif [[ "$MACHINE" == 'linux' ]]; then
   alias dev-notes='cd $HOME/documents/dev-notes'
 fi
 
