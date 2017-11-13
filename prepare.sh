@@ -21,13 +21,13 @@ get-script-dir ()
 	echo $dir
 }	# ----------  end of function get-script-dir  ----------
 
-
+# TODO: edit to set powerline shell inside dot folder
 dotfile_path=$(get-script-dir)
-real_config_path=$dotfile_path/.bashrc
+real_config_path=$dotfile_path/bashrc
 home_path=$HOME
 link_path=$home_path/.bashrc
 profile_link_path=$home_path/.bash_profile
-profile_origin_path=$dotfile_path/.bash_profile
+profile_origin_path=$dotfile_path/bash_profile
 powerline_origin_path=$dotfile_path/powerline-shell.py
 powerline_link_path=$HOME/.powerline-shell.py
 
