@@ -61,6 +61,9 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
     - `prepare.sh` would fail to link `.bashrc` and `.bash_profile` if they already exist due to race condition, no more
     - new hosts/users wouldn't have submodules needed for prompt downloaded, script now updates submodules
     - new hosts/users wouldn't be able use new `.bashrc` because `.bash_profile` sets the `BASH_CONFIGS_ROOT` var it needs to source partial config files
+  - Fix `bashrc` bugs
+    - add export for `BASH_CONFIGS_ROOT` since it is needed for situations where bashrc gets called before `bash_profile` not sure why that would happen but it seems to fix it
+  - Fix bug with `bash_aliases.sh` where a unary operator error would be printed due to poor syntax on the `MACHINE` assignemtn if block
 
 
 # OLD VERSION, KEEP WHAT IS USEFUL IN REWRITE DELETE REST
