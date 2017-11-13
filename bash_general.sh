@@ -1,9 +1,13 @@
 # 
-
+#
 # Description:
-
+#
 # # Here is where more general bashrc configurations that don't belong in any
-  # other partial config file.
+# # other partial config file.
+
+
+# Case-Insensitive Auto Completion
+bind "set completion-ignore-case on"
 
 # Git Bash Completion
 # Will activate bash git completion if installed
