@@ -5,12 +5,12 @@ This is my repository to store my personal bash configurations. They are divided
 ## Files
 *heavily inspired by* [alrra/dotfiles](https://github.com/alrra/dotfiles)
 This bash configuration seperates all of the configurations into different files based on the context:
-[x] `bash_profile`: the entry point for the login shell
-[x] `bashrc`: the standard entry point for non-login shell
-[x] `bash_exports`: custom dotfile that has all of bash's exports
-[x] `bash_aliases`: custom file that has all bash aliases as called by bashrc
-[x] `bash_functions`: custom file that has all bash functions called by bashrc
-[ ] `bash_options`: `shopt` tweaks to the shell, look at alrra/dotfiles for ideas
+- [x] `bash_profile`: the entry point for the login shell
+- [x] `bashrc`: the standard entry point for non-login shell
+- [x] `bash_exports`: custom dotfile that has all of bash's exports
+- [x] `bash_aliases`: custom file that has all bash aliases as called by bashrc
+- [x] `bash_functions`: custom file that has all bash functions called by bashrc
+- [ ] `bash_options`: `shopt` tweaks to the shell, look at alrra/dotfiles for ideas
 
 The `bash_profile` will only source `bash_exports` to load in all global variables needed that are customized for this configuration. Then in `bashrc` `bash_aliases`, `bash_functions`, `bash_general` & `bash_options` get sourced to create the proper non-login shell so that it's easier to manage all the numerous customizations this configuration has. On top of those sources listed, `bashrc` will also source a symlink, `prompt-link` which will point to the right script file inside of `./prompts` to use one of several different prompt options.
 
@@ -26,11 +26,11 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
 
 ## TODO
 ***Note*** *many other todos have been completed, but only recently have they been getting tracked inside this README*
-[ ] add *golang* version of powerline prompt for better latency
-[ ] combine the functionality of `choose-prompt.sh` with `prepare.sh` since this doesn't need to be run several times. Also have the bash prompt be the default option
-[ ] add grep colors support based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/colors)
-[ ] add autocomplete functionality based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/autocomplete)
-[ ] add bash options into `bash_options.sh` based off [alrra/dotfiles](https://github.com/alrra/dotfiles/blob/master/src/shell/bash_options)
+- [ ] add *golang* version of powerline prompt for better latency
+- [ ] combine the functionality of `choose-prompt.sh` with `prepare.sh` since this doesn't need to be run several times. Also have the bash prompt be the default option
+- [ ] add grep colors support based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/colors)
+- [ ] add autocomplete functionality based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/autocomplete)
+- [ ] add bash options into `bash_options.sh` based off [alrra/dotfiles](https://github.com/alrra/dotfiles/blob/master/src/shell/bash_options)
 
 
 ## Change History
@@ -40,6 +40,7 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
   - `MACHINE` variable now is exported based off which host OS this is run from
     - This is important for several exports, aliases, & functions that will be different due to host OS type
   - `BASH_CONFIGS_ROOT` variable now gets defined in `bash_profile` to make getting config paths easier
+  - `prompts/` now has all prompt configs including submodules for more complex dynamic prompts
 
 
 # OLD VERSION, KEEP WHAT IS USEFUL IN REWRITE DELETE REST
