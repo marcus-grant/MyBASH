@@ -27,7 +27,7 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
 ## TODO
 ***Note*** *many other todos have been completed, but only recently have they been getting tracked inside this README*
 - [x] add *golang* version of powerline prompt for better latency
-- [ ] combine the functionality of `choose-prompt.sh` with `prepare.sh` since this doesn't need to be run several times. Also have the bash prompt be the default option
+- [x] fix `choose-prompt.sh` to handle all edge cases and to be more readable
 - [ ] add grep colors support based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/colors)
 - [ ] add autocomplete functionality based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/autocomplete)
 - [ ] add bash options into `bash_options.sh` based off [alrra/dotfiles](https://github.com/alrra/dotfiles/blob/master/src/shell/bash_options)
@@ -54,6 +54,8 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
     - this also means that `prompts/powerline-go` needs to be downloaded manually to be used
   - `bash_exports` now has improved `PATH`, `GOPATH` & `GOBIN` which makes `powerline-go` work and makes managing go projects easier
     - *i.e.* they're all inside `~/bin/go`
+  - Complete rewrite of `prompts/choose-prompt.sh` since not all edge cases were addressed
+  - Also rewrite `prompts/choose-prompt.sh` because it was hard to alter (spaghetti code) and to make it more readable (forward declaration)
 
 
 # OLD VERSION, KEEP WHAT IS USEFUL IN REWRITE DELETE REST
