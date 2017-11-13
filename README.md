@@ -56,6 +56,10 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
     - *i.e.* they're all inside `~/bin/go`
   - Complete rewrite of `prompts/choose-prompt.sh` since not all edge cases were addressed
   - Also rewrite `prompts/choose-prompt.sh` because it was hard to alter (spaghetti code) and to make it more readable (forward declaration)
+  - Fix bugs in `prepare.sh`
+    - `prepare.sh` would fail to link `.bashrc` and `.bash_profile` if they already exist due to race condition, no more
+    - new hosts/users wouldn't have submodules needed for prompt downloaded, script now updates submodules
+    - new hosts/users wouldn't be able use new `.bashrc` because `.bash_profile` sets the `BASH_CONFIGS_ROOT` var it needs to source partial config files
 
 
 # OLD VERSION, KEEP WHAT IS USEFUL IN REWRITE DELETE REST
