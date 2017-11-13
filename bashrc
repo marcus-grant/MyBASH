@@ -7,7 +7,7 @@
 ########
 
 # make sure BASH_CONFIGS_ROOT is exported
-export BASH_CONFIGS_ROOT=$(dirname "$(readlink ~/.bash_profile)")
+# export BASH_CONFIGS_ROOT=$(dirname "$(readlink ~/.bash_profile)")
 
 # get absolute path to prompt link & use prompt link to get prompt
 source "$BASH_CONFIGS_ROOT/prompts/prompt-link"
