@@ -28,6 +28,7 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
 ***Note*** *many other todos have been completed, but only recently have they been getting tracked inside this README*
 - [x] add *golang* version of powerline prompt for better latency
 - [x] fix `choose-prompt.sh` to handle all edge cases and to be more readable
+- [ ] include old README stuff that's valid here, but move all instructional stuff to dev-notes, and delete the rest
 - [ ] add grep colors support based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/colors)
 - [ ] add autocomplete functionality based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/autocomplete)
 - [ ] add bash options into `bash_options.sh` based off [alrra/dotfiles](https://github.com/alrra/dotfiles/blob/master/src/shell/bash_options)
