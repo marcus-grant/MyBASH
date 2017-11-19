@@ -41,6 +41,10 @@ alias lt='ls -laHGt'
 alias grep='grep --color=auto'
 alias igrep='grep -i' # a grep alias for case insensitive searches
 
+# Use xclip to get & set the clipboard
+alias clipin='xclip -i -selection clipboard'
+alias clipout='xclip -o -selection clipboard'
+
 # Xresources
 alias xup='xrdb $HOME/.Xresources'
 
