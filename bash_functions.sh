@@ -1,8 +1,4 @@
 ########
-#
-# Functions for Bash Prompt
-#
-########
 
 # some functions need to know the host OS type, and the only argument to this script
 # will be stored as variable 'machine'
@@ -30,11 +26,34 @@ function psg {
 # xzc - compresses 
 function compress() {
   # tar c $1 | xz > "$1.tar.xz"
-  tar -cvzf "$1.tar.gz" $1
+  # if a directory, keep a reference with ending slash, and one without
+  local FILENAME="$1"
+  local DIRNAME="$1"
+  if [[ -d $1 ]]; then
+    if [[ "$1" == */ ]]; then
+      FILENAME="${FILENAME::-1}"
+    else
+      DIRNAME="$DIRNAME/"
+    fi
+    tar --exclude=$FILENAME.tar.gz -cvzf $FILENAME.tar.gz $DIRNAME
+  else
+    tar -cvzf $FILENAME.tar.gz $FILENAME
+  fi
 }
 
 function compress-xz() {
-  tar -cvJf "$1.tar.xz" $1
+  local FILENAME="$1"
+  local DIRNAME="$1"
+  if [[ -d $1 ]]; then
+    if [[ "$1" == */ ]]; then
+      FILENAME="${FILENAME::-1}"
+    else
+      DIRNAME="$DIRNAME/"
+    fi
+    tar --exclude=$FILENAME.tar.xz -cvJf $FILENAME.tar.xz $DIRNAME
+  else
+    tar -cvJf $FILENAME.tar.xz $FILENAME
+  fi
 }
 
 # A function to extract correctly any archive based on extension
