@@ -149,6 +149,13 @@ function caps-as-esc()
     xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 }
 
+# I've been stuck with only caps lock on before due to the above function
+# This is a nifty one line python command that toggles off caps lock
+function CAPS-OFF()
+{
+  python -c 'from ctypes import *; X11 = cdll.LoadLibrary("libX11.so.6"); display = X11.XOpenDisplay(None); X11.XkbLockModifiers(display, c_uint(0x0100), c_uint(2), c_uint(0)); X11.XCloseDisplay(display)'
+}
+
 
 keyboard-default ()
 {
