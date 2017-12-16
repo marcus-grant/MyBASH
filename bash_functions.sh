@@ -239,6 +239,11 @@ view-markup ()
   function tmr()    { tmux rename-session -t $1 $2; }
   function tmlk()   { tmux list-keys; }
 
+# set node permissions to whoami
+node-permissions-whoami () {
+  sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
+}
+
 
 
   # launch steam on arch
