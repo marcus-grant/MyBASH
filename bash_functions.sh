@@ -23,37 +23,171 @@ function psg {
 }
 
 # Compression functions
-# xzc - compresses 
+
+# tar-progress - tars a directory with progress bars
+function tar-progress() {
+  echo "Creating tar archive of $1"
+  # Set records to be of size 10MB, this way checkpoints occur every 10MB
+  # Note that this checks a directory's apparent size in MegaBytes
+  # This means that although internally MebiBytes are used,
+  # The records calculation needs to reflect the apparent size instead
+  local recordSize="10M"
+  local recordSizeBytes=10000000
+
+  # from StackOverflow: http://bit.ly/2EjbQhn
+  # gets number of bytes of file, might need apparent size instead
+  # the cut -f1 removes everything after first non-space char
+  # As noted before, the size return is in MB, NOT MiB
+  local dirBytes=$(du -sb $1 | cut -f1)
+
+  # Because the number of records are truncated, inorder to avoid
+  # overflow in sending states to progress-bar, add one to number of records
+  local dirRecords=$((($dirBytes / $recordSizeBytes) + 1))
+
+  # Calculate the number of records per tick
+  # let recordsPerTick=${dirRecords}/${progressTicks}
+  # From StackOverflow: http://bit.ly/2EhqIg8
+  # sets tar's checkpoints based on resizing records to 10MiB
+  local recordSize="--record-size=10M"
+
+  # GNU tar docs: Checkpoints http://bit.ly/2EjA2Ai
+  local numCheck="--checkpoint=1"
+
+  # GNU tar docs: 3.11 Running External Commands http://bit.ly/2EhbHLm
+  # use dot action to test functionality
+  tar $recordSize $numCheck \
+    --checkpoint-action=exec='$HOME/bin/progress-bar $TAR_CHECKPOINT '$dirRecords' tar' \
+    -cf $1.tar $1
+  echo
+  echo "Finished!"
+}
+
+# an internal version of the above function that is used for piping instead
+function _tar-progress() {
+  echo "Creating tar archive of $1"
+  # Set records to be of size 10MB, this way checkpoints occur every 10MB
+  # Note that this checks a directory's apparent size in MegaBytes
+  # This means that although internally MebiBytes are used,
+  # The records calculation needs to reflect the apparent size instead
+  local recordSize="10M"
+  local recordSizeBytes=10000000
+
+  # from StackOverflow: http://bit.ly/2EjbQhn
+  # gets number of bytes of file, might need apparent size instead
+  # the cut -f1 removes everything after first non-space char
+  # As noted before, the size return is in MB, NOT MiB
+  local dirBytes=$(du -sb $1 | cut -f1)
+
+  # Because the number of records are truncated, inorder to avoid
+  # overflow in sending states to progress-bar, add one to number of records
+  local dirRecords=$((($dirBytes / $recordSizeBytes) + 1))
+
+  # Calculate the number of records per tick
+  # let recordsPerTick=${dirRecords}/${progressTicks}
+  # From StackOverflow: http://bit.ly/2EhqIg8
+  # sets tar's checkpoints based on resizing records to 10MiB
+  local recordSize="--record-size=10M"
+
+  # GNU tar docs: Checkpoints http://bit.ly/2EjA2Ai
+  local numCheck="--checkpoint=1"
+
+  # GNU tar docs: 3.11 Running External Commands http://bit.ly/2EhbHLm
+  # use dot action to test functionality
+  tar $recordSize $numCheck \
+    --checkpoint-action=exec='$HOME/bin/progress-bar $TAR_CHECKPOINT '$dirRecords' tar' \
+    -cf - $1
+  echo
+  echo "Finished!"
+}
+
+
+# compress using gzip or pigzjk 
+# TODO: replace with python program that handles everything better
 function compress() {
-  # tar c $1 | xz > "$1.tar.xz"
-  # if a directory, keep a reference with ending slash, and one without
-  local FILENAME="$1"
-  local DIRNAME="$1"
-  if [[ -d $1 ]]; then
-    if [[ "$1" == */ ]]; then
-      FILENAME="${FILENAME::-1}"
-    else
-      DIRNAME="$DIRNAME/"
+  # validate arguments
+  # 1st check for number of args
+  local nThreads=$(nproc)
+  if (($# < 2)); then
+    local msg="[ERROR]: Incorrect arguments,"
+    local msg="$msg 1st argument is compression type, 2nd is file/dir path"
+    echo $msg
+    exit 1
+  elif (($# == 3)); then
+    nThreads=$3
+  fi
+
+  # check for the 2nd arg being an existing file/dir/link
+  if [ ! -f $2 ]; then
+    if [ ! -d $2 ]; then
+      echo "[ERROR]: 2nd argument needs to be a valid file/directory/link"
+      exit 1
     fi
-    tar --exclude=$FILENAME.tar.gz -cvzf $FILENAME.tar.gz $DIRNAME
+  fi
+
+  # format file & firname to work for both the file path case & dir case
+  # if a directory, keep a reference with ending slash, and one without
+  local file="$2"
+  local dir="$2"
+  local isDirectory=1
+  if [[ -d $1 ]]; then
+    isDirectory=0
+    if [[ "$1" == */ ]]; then
+      file="${file::-1}"
+    else
+      dir="$dir/"
+    fi
+  fi
+
+  # Now that it is known if directory or file...
+  # check which type of of compression/archival was specified,
+  # then execute that type's associated commands
+  local type="$1"
+  if [ isDirectory ]; then
+    local tarCmd="tar-progress $file"
+    case $1 in
+      -t)   $tarCmd ;;
+      -b)   $tarCmd && lbzip2 -zv9n $nThreads $file.tar ;; 
+      -g)   $tarCmd && pigz -fvp $nThreads $file.tar ;;
+      -x)   $tarCmd && pixz -p $nThreads $file.tar $file.tpxz ;;
+      *)    echo "'$1' isn't an existing compression option" ;;
+    esac
   else
-    tar -cvzf $FILENAME.tar.gz $FILENAME
+    case $1 in
+      -b)   lbzip2 -zv9n $nThreads $file ;; 
+      *)    echo "'$1' isn't an existing compression option" ;;
+    esac
   fi
 }
 
 function compress-xz() {
-  local FILENAME="$1"
-  local DIRNAME="$1"
+  local filename="$1"
+  local dirname="$1"
   if [[ -d $1 ]]; then
     if [[ "$1" == */ ]]; then
-      FILENAME="${FILENAME::-1}"
+      filename="${filename::-1}"
     else
-      DIRNAME="$DIRNAME/"
+      dirname="$dirname/"
     fi
-    tar --exclude=$FILENAME.tar.xz -cvJf $FILENAME.tar.xz $DIRNAME
+    tar --exclude=$filename.tar.xz -cvJf $filename.tar.xz $dirname
   else
-    tar -cvJf $FILENAME.tar.xz $FILENAME
+    tar -cvJf $filename.tar.xz $filename
   fi
+}
+
+# Time functions
+# get timestamp in milliseconds
+function millis() {
+  echo $(($(date +%s%N)/1000000))
+}
+
+# A timing function that measures the milliseconds to run the command in $1
+function time-cmd() {
+  local _START=$(millis)
+  $@
+  local _STOP=$(millis)
+  local _DIFFERENCE=$(($_STOP - $_START))
+  echo "Command $1 Completed!"
+  echo "It took $_DIFFERENCE milliseconds to complete"
 }
 
 # A function to extract correctly any archive based on extension
@@ -66,7 +200,14 @@ function extract () {
     if [ -f $1 ] ; then
         case $1 in
             *.tar.xz)   tar xJf $1      ;; 
+            *.tpxz)     pixz -d $1 "${1%.*}.tar" && tar xf "${1%.*}.tar";;
             *.tar.bz2)  tar xjf $1      ;;
+            # *.tar.bz2)
+            #   if [ hash lbzip2 ]; then
+            #     tar -I lbzip2 -xvf $1
+            #   else
+            #     tar xjf $1
+            #   fi; ;;
             *.tar.gz)   tar xzf $1      ;;
             *.bz2)      bunzip2 $1      ;;
             *.rar)      unrar e $1      ;;
