@@ -15,6 +15,11 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
+# These aliases allow the saving of one PresentWorkingDirectory (pwd)
+# This can then be recalled to take you back to that location
+alias remember-location='export tmp_location=$(pwd)'
+alias recall-location='cd $tmp_location'
+
 # different aliases based on if it's a mac
 # TODO: Verify that this works after splitting aliases into own file and passing args
 if [[ "$MACHINE" == 'mac' ]]; then
