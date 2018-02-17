@@ -16,3 +16,5 @@ if [ -f $HOME/.bashrc ]; then
     source $HOME/.bashrc
 fi
 #EOF
+
+export PATH="$HOME/.cargo/bin:$PATH"
