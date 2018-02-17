@@ -27,3 +27,6 @@ source "$BASH_CONFIGS_ROOT/bash_general.sh"
 # source bash internal options
 # TODO: create it
 
+
+# source fzf - generated from fzf install script
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
