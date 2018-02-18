@@ -103,6 +103,9 @@ fbr() {
   - Fix `bashrc` bugs
     - add export for `BASH_CONFIGS_ROOT` since it is needed for situations where bashrc gets called before `bash_profile` not sure why that would happen but it seems to fix it
   - Fix bug with `bash_aliases.sh` where a unary operator error would be printed due to poor syntax on the `MACHINE` assignemtn if block
+- **2018 - 02 - 17** FZF & Folds
+  - FZF exports & functions
+  - folding marks are now in use in some files
 
 
 # OLD VERSION, KEEP WHAT IS USEFUL IN REWRITE DELETE REST
