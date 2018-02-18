@@ -4,25 +4,79 @@
 # will be stored as variable 'machine'
 machine=$1
 
-# A function to CD into the desktop from anywhere
-# so you just type desktop.
-# HINT: It uses the built in USER variable to know your OS X username
+t_error="[ERROR]:"
 
-# USE: desktop
-#      desktop subfolder
-function desktop {
-  cd /Users/$USER/Desktop/$@
+################ FZF, RipGrep, etc. Functions{{{
+
+# use fd to quickly search
+function fdf() {
+  if command -v fd >/dev/null; then
+    fd . $1 -H -E *.git* | fzf
+  else
+    find . $1 -type f | fzf
+  fi
 }
 
-# A function to easily grep for a matching process
-# USE: psg postgres
-function psg {
-  FIRST=`echo $1 | sed -e 's/^\(.\).*/\1/'`
-  REST=`echo $1 | sed -e 's/^.\(.*\)/\1/'`
-  ps aux | grep "[$FIRST]$REST"
+# fkill - uses fzf to find & kill (select then ENTER) a process
+# fkill - kill process
+fkill() {
+  local pid
+  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+  fi
 }
 
-# Compression functions
+# fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
+fbr() {
+  local branches branch
+  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+#}}}
+
+
+################ Compression & Extract functions{{{
+
+# A function to extract correctly any archive based on extension
+# I ALWAYS forget how to properly extract all the different kinds of archives
+# that exist from the command line, so this is a nice helper to have.
+# USE: extract imazip.zip
+#      extract imatar.tar
+# TODO: Add case for unrar
+function extract () {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.xz)   tar xJf $1      ;; 
+            *.tpxz)     pixz -d $1 "${1%.*}.tar" && tar xf "${1%.*}.tar";;
+            *.tar.bz2)  tar xjf $1      ;;
+            # *.tar.bz2)
+            #   if [ hash lbzip2 ]; then
+            #     tar -I lbzip2 -xvf $1
+            #   else
+            #     tar xjf $1
+            #   fi; ;;
+            *.tar.gz)   tar xzf $1      ;;
+            *.bz2)      bunzip2 $1      ;;
+            *.rar)      unrar e $1      ;;
+            *.gz)       gunzip $1       ;;
+            *.tar)      tar xf $1       ;;
+            *.tbz2)     tar xjf $1      ;;
+            *.tgz)      tar xzf $1      ;;
+            *.zip)      unzip $1        ;;
+            *.Z)        uncompress $1   ;;
+            *.7zip)	    7z x $1		;;
+            *)          echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
 
 # tar-progress - tars a directory with progress bars
 function tar-progress() {
@@ -173,8 +227,11 @@ function compress-xz() {
     tar -cvJf $filename.tar.xz $filename
   fi
 }
+#}}}
 
-# Time functions
+
+################ Time functions{{{
+
 # get timestamp in milliseconds
 function millis() {
   echo $(($(date +%s%N)/1000000))
@@ -189,41 +246,10 @@ function time-cmd() {
   echo "Command $1 Completed!"
   echo "It took $_DIFFERENCE milliseconds to complete"
 }
+#}}}
 
-# A function to extract correctly any archive based on extension
-# I ALWAYS forget how to properly extract all the different kinds of archives
-# that exist from the command line, so this is a nice helper to have.
-# USE: extract imazip.zip
-#      extract imatar.tar
-# TODO: Add case for unrar
-function extract () {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.xz)   tar xJf $1      ;; 
-            *.tpxz)     pixz -d $1 "${1%.*}.tar" && tar xf "${1%.*}.tar";;
-            *.tar.bz2)  tar xjf $1      ;;
-            # *.tar.bz2)
-            #   if [ hash lbzip2 ]; then
-            #     tar -I lbzip2 -xvf $1
-            #   else
-            #     tar xjf $1
-            #   fi; ;;
-            *.tar.gz)   tar xzf $1      ;;
-            *.bz2)      bunzip2 $1      ;;
-            *.rar)      unrar e $1      ;;
-            *.gz)       gunzip $1       ;;
-            *.tar)      tar xf $1       ;;
-            *.tbz2)     tar xjf $1      ;;
-            *.tgz)      tar xzf $1      ;;
-            *.zip)      unzip $1        ;;
-            *.Z)        uncompress $1   ;;
-            *.7zip)	    7z x $1		;;
-            *)          echo "'$1' cannot be extracted via extract()" ;;
-        esac
-    else
-        echo "'$1' is not a valid file"
-    fi
-}
+
+################ Git Functions{{{
 
 # Because I always forget the address format for git clones using SSH -
 # here is a function that takes a string USER/REPOSITORY as only argument
@@ -257,6 +283,10 @@ function gpa () {
   git fetch --all
   git pull --all
 }
+#}}}
+
+
+################ Media Functions{{{
 
 # Helper function to recursively apply the right plex permissions
 function plex-permissions()
@@ -270,20 +300,10 @@ function plex-permissions()
   echo "Done! Plex servers should now be able to index & gather metadata for this folder."
   echo
 }
+#}}}
 
-# A helper to pipe commands into python for immediate interpretation
-# TODO: figure out proper way to handle newlines, quotes, and spaces
-function pypipe()
-{
 
-  python_statements="$1"
-  echo "$python_statements" | python
-  # for statement in "$@"; do
-  #   python_statements="$python_statements$statement\n"
-  # done
-  # echo "$python_statements" | python
-}
-
+################ HID Input Functions{{{
 
 function caps-as-esc()
 {
@@ -296,22 +316,6 @@ function CAPS-OFF()
 {
   python -c 'from ctypes import *; X11 = cdll.LoadLibrary("libX11.so.6"); display = X11.XOpenDisplay(None); X11.XkbLockModifiers(display, c_uint(0x0100), c_uint(2), c_uint(0)); X11.XCloseDisplay(display)'
 }
-
-
-keyboard-default ()
-{
-    setxkbmap us
-}	# ----------  end of function keyboard-default  ----------
-
-
-
-# ssh-agent startup script that checks for a previous running one
-#if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-#    ssh-agent > $HOME/.ssh-agent-thing
-#fi
-#if [[ "$SSH_AGENT_PID" == "" ]]; then
-#    eval "$(<$HOME/.ssh-agent-thing)"
-#fi
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -356,6 +360,36 @@ toggle-touchpad ()
 
 }	# ----------  end of function toggle-touchpad  ----------
 
+keyboard-default ()
+{
+    setxkbmap us
+}	# ----------  end of function keyboard-default  ----------
+#}}}
+
+
+################ Misc. Functions{{{
+
+# A function to easily grep for a matching process
+# USE: psg postgres
+function psg {
+  FIRST=`echo $1 | sed -e 's/^\(.\).*/\1/'`
+  REST=`echo $1 | sed -e 's/^.\(.*\)/\1/'`
+  ps aux | grep "[$FIRST]$REST"
+}
+
+# A helper to pipe commands into python for immediate interpretation
+# TODO: figure out proper way to handle newlines, quotes, and spaces
+function pypipe()
+{
+
+  python_statements="$1"
+  echo "$python_statements" | python
+  # for statement in "$@"; do
+  #   python_statements="$python_statements$statement\n"
+  # done
+  # echo "$python_statements" | python
+}
+
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  view-markup
 #   DESCRIPTION:  From https://unix.stackexchange.com/questions/4140/markdown-viewer#120519
@@ -385,10 +419,22 @@ node-permissions-whoami () {
   sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
 }
 
-
-
-  # launch steam on arch
-
+# launch steam on arch
 function steam-arch {
 	LD_PRELOAD='/usr/$LIB/libstdc++.so.6 /usr/$LIB/libgcc_s.so.1 /usr/$LIB/libxcb.so.1 /usr/$LIB/libgpg-error.so' steam
 }
+
+#}}}
+
+
+# Disabled Functions (Commented Out){{{
+
+# ssh-agent startup script that checks for a previous running one
+#if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+#    ssh-agent > $HOME/.ssh-agent-thing
+#fi
+#if [[ "$SSH_AGENT_PID" == "" ]]; then
+#    eval "$(<$HOME/.ssh-agent-thing)"
+#fi
+#}}}
+
