@@ -57,7 +57,6 @@ fbr() {
 ```
 - and in `bash_exports` there are default commands that allow pressing CTRL+T & ALT+C to apped to the terminal directories to be used in commands and to cd to
 - by adding a `.gitignore` with directories in the root to ignore, it's possible to ignore some files 
-- Instead, just move .dotfiles directory to just `dotfiles` this way it won't get ignored in search and in %99 of cases hidden dirs/files don't need to be searched
 
 
 ## TODO
