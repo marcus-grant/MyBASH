@@ -22,12 +22,51 @@ The `bash_profile` will only source `bash_exports` to load in all global variabl
 
 
 ## Functions
+- FZF since it just uses STDIN/OUT is amazing at searching, particularly when combined with an even better `fd` command to use instead of find
+### FZF
+```sh
+# use fd to quickly search
+function fdf() {
+  if command -v fd >/dev/null; then
+    fd . $1 -H -E *.git* | fzf
+  else
+    find . $1 -type f | fzf
+  fi
+}
+
+# fkill - uses fzf to find & kill (select then ENTER) a process
+# fkill - kill process
+fkill() {
+  local pid
+  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+  fi
+}
+
+# fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
+fbr() {
+  local branches branch
+  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+```
+- and in `bash_exports` there are default commands that allow pressing CTRL+T & ALT+C to apped to the terminal directories to be used in commands and to cd to
+- by adding a `.gitignore` with directories in the root to ignore, it's possible to ignore some files 
+- Instead, just move .dotfiles directory to just `dotfiles` this way it won't get ignored in search and in %99 of cases hidden dirs/files don't need to be searched
 
 
 ## TODO
 ***Note*** *many other todos have been completed, but only recently have they been getting tracked inside this README*
 - [x] add *golang* version of powerline prompt for better latency
 - [x] fix `choose-prompt.sh` to handle all edge cases and to be more readable
+- [ ] fzf integrations
+  - [ ] improvements to fd
+  - [ ] default options as exports
 - [ ] add git autocomplete, [here](https://github.com/git/git/blob/master/contrib/completion/git-completion.bash) is one possible solution
 - [ ] include old README stuff that's valid here, but move all instructional stuff to dev-notes, and delete the rest
 - [ ] add grep colors support based off [alrra/dotfiles](https://github.com/alrra/dotfiles/tree/master/src/shell/colors)
