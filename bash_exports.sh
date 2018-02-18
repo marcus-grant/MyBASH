@@ -65,6 +65,13 @@ if [ -d $HOME/.virtualenvs ]; then
 fi
 
 
+# fzf exports - from https://mike.place/2017/fzf-fd/
+export FZF_DEFAULT_COMMAND="fd . $HOME"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+
+
+
 # set xdg's
 # TODO: find better way to standardize this across systems particularly on arch
 #export XDG_CONFIG_HOME="${XDG_CONFIG_HOME}:$HOME/.config"
