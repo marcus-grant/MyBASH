@@ -106,6 +106,15 @@ fbr() {
 - **2018 - 02 - 17** FZF & Folds
   - FZF exports & functions
   - folding marks are now in use in some files
+  - `aliases`
+    - file has been reorganized with vim fold marks
+    - also `scl` now works as the shortcut to `sudo systemctl`
+    - `pacman` now replaces the real pacman with `sudo pacman --color always`
+    - `l` is now for nonhidden files
+    - `la` is roughly same as before, as many details as possible
+    - `lt` is `la` but sorted by time & reversed so new is near prompt
+    - `lS` is `lt` except it sorts by size & reversed so large near prompt
+- **2018 - 02 - 18** Migrating **all** dotfile folders into the `dotfiles` repo
 
 
 # OLD VERSION, KEEP WHAT IS USEFUL IN REWRITE DELETE REST
